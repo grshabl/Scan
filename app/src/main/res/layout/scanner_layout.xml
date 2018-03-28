@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_height="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_width="match_parent"
+        android:id="@+id/editCode">
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:id="@+id/code"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/enterCode" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ok"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/enterCode"/>
+    </RelativeLayout>
+    <TextView
+        android:text = "Товар :"
+        android:id = "@+id/tovar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <TextView
+        android:layout_below="@id/tovar"
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="75dp" />
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_weight="0.16">
+        <TextView
+            android:text = "QR  "
+            android:id="@+id/qrtext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/qrtext"
+            android:id="@+id/qrcode"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_weight="0.71">
+        <TextView
+            android:text="PDF417  "
+            android:id="@+id/pdf417Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/pdf417code"
+            android:layout_toEndOf="@id/pdf417Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+        <TextView
+            android:text="В коробке  "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/boxCountText"/>
+        <TextView
+            android:id="@+id/boxCount"
+            android:layout_toEndOf="@id/boxCountText"
+            android:text="0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <Button
+            android:layout_width="161dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/erase"
+            android:text="Очистить данные"
+            />
+
+        <Button
+            android:text="PDF417 не сканируется"
+            android:layout_width="161dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:id="@+id/cantPdf"
+            android:layout_toEndOf="@id/erase" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>
