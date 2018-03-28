@@ -1,24 +1,21 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:padding="10dp" >
+    android:padding="10dp">
 
     <TextView
+        android:id="@+id/tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Напишите текст: "
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/tv"
-        />
+        android:text="@string/writeadvice"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/input_text"
-        >
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <requestFocus />
     </EditText>
 

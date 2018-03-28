@@ -5,16 +5,18 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Просканируйте EAN-13 или введите ниже"/>
+        android:text="@string/helpean"/>
+
     <EditText
+        android:id="@+id/ean13"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ean13"
-        android:text="Код"/>
+        android:hint="Код"/>
+
     <Button
+        android:id = "@+id/enter_ean13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text ="Ввод"
-        android:id = "@+id/enter_ean13"/>
+        android:text ="@string/input" />
 
 </LinearLayout>

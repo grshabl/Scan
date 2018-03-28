@@ -13,15 +13,14 @@
 
     <Button
 
-        android:text="Сканирование"
-        android:layout_height="wrap_content"
         android:id="@+id/scan"
+        android:text="@string/scan"
+        android:layout_height="wrap_content"
         android:layout_width="200dp"
-
         android:layout_centerHorizontal="true" />
 
     <Button
-        android:text="Настройки"
+        android:text="@string/settings"
         android:layout_height="wrap_content"
         android:id="@+id/settings"
         android:layout_width="200dp"
@@ -30,20 +29,19 @@
         android:layout_alignStart="@+id/scan"
         android:layout_marginTop="30dp" />
     <Button
-        android:text="Выход"
-        android:layout_height="wrap_content"
         android:id="@+id/exit"
+        android:text="@string/ext"
+        android:layout_height="wrap_content"
         android:layout_width="200dp"
         android:layout_below="@+id/view"
         android:layout_alignLeft="@+id/scan"
         android:layout_alignStart="@+id/scan"
         android:layout_marginTop="30dp" />
     <Button
-        android:text="Просмотр"
-        android:layout_height="wrap_content"
         android:id="@+id/view"
+        android:text="@string/looking"
+        android:layout_height="wrap_content"
         android:layout_width="200dp"
-
         android:layout_below="@+id/settings"
         android:layout_alignLeft="@+id/settings"
         android:layout_alignStart="@+id/settings"

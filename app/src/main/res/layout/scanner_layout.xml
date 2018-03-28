@@ -1,92 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:weightSum="1">
 
     <RelativeLayout
-        android:orientation="vertical"
-        android:layout_height="60dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
+        android:id="@+id/editCode"
         android:layout_width="match_parent"
-        android:id="@+id/editCode">
+        android:layout_height="60dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
+
         <EditText
+            android:id="@+id/code"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-
-            android:id="@+id/code"
             android:layout_alignParentStart="true"
             android:layout_toStartOf="@+id/enterCode" />
+
         <Button
+            android:id="@+id/enterCode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ok"
-            android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:id="@+id/enterCode"/>
+            android:layout_alignParentTop="true"
+            android:text="@string/ok" />
     </RelativeLayout>
+
     <TextView
-        android:text = "Товар :"
-        android:id = "@+id/tovar"
+        android:id="@+id/tovar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        />
+        android:text="@string/goods" />
+
     <TextView
-        android:layout_below="@id/tovar"
         android:id="@+id/description"
         android:layout_width="match_parent"
-        android:layout_height="75dp" />
-
+        android:layout_height="75dp"
+        android:layout_below="@id/tovar" />
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_weight="0.16">
+
         <TextView
-            android:text = "QR  "
             android:id="@+id/qrtext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:text="@string/qr" />
 
         <TextView
+            android:id="@+id/qrcode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/qrtext"
-            android:id="@+id/qrcode"/>
+            android:layout_toEndOf="@id/qrtext" />
     </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_weight="0.71">
+
         <TextView
-            android:text="PDF417  "
             android:id="@+id/pdf417Text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/pdf417" />
+
         <TextView
             android:id="@+id/pdf417code"
-            android:layout_toEndOf="@id/pdf417Text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/pdf417Text" />
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="30dp">
+
         <TextView
-            android:text="В коробке  "
+            android:id="@+id/boxCountText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/boxCountText"/>
+            android:text="@string/inbox" />
+
         <TextView
             android:id="@+id/boxCount"
-            android:layout_toEndOf="@id/boxCountText"
-            android:text="0"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/boxCountText"
+            android:text="0" />
     </RelativeLayout>
 
 
@@ -96,19 +104,18 @@
 
 
         <Button
+            android:id="@+id/erase"
             android:layout_width="161dp"
             android:layout_height="wrap_content"
-            android:id="@+id/erase"
-            android:text="Очистить данные"
-            />
+            android:text="@string/dataclear" />
 
         <Button
-            android:text="PDF417 не сканируется"
+            android:id="@+id/cantPdf"
             android:layout_width="161dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:id="@+id/cantPdf"
-            android:layout_toEndOf="@id/erase" />
+            android:layout_toEndOf="@id/erase"
+            android:text="@string/pdfwork" />
 
     </RelativeLayout>
 

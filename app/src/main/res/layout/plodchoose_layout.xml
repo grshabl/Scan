@@ -17,14 +17,14 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:id="@+id/choosePlod"
-        android:text="Выберите Plod:"
+        android:text="@string/chooseplod"
         android:layout_centerHorizontal="true"
         />
     <Spinner
+        android:id="@+id/spinner"
         android:layout_below="@id/choosePlod"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinner" />
+        android:layout_height="wrap_content"/>
 
     <Button
         android:layout_width="match_parent"

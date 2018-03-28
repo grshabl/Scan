@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">test</string>
+    <string name="agree">Принять</string>
+    <string name="deleteplod">Удалить данные по PLOD</string>
+    <string name="templatesk">Шаблон ШК коробки</string>
+    <string name="pdfwork">PDF417 не сканируется</string>
+    <string name="dataclear">PDF417 не сканируется</string>
+    <string name="inbox">В коробке</string>
+    <string name="pdf417">PDF417</string>
+    <string name="qr">QR</string>
+    <string name="goods">Товар :</string>
+    <string name="ok">Ok</string>
+    <string name="chooseplod">Выберите Plod:</string>
+    <string name="helpean">Просканируйте EAN-13 или введите ниже</string>
+    <string name="input">Ввод</string>
+    <string name="export">Экспорт данных</string>
+    <string name="handsearch">Ручной поиск</string>
+    <string name="deletebox">Удалить короб</string>
+    <string name="clearalldata">Очистить все данные</string>
+    <string name="writeadvice">Напишите текст:</string>
+    <string name="scan">Сканирование</string>
+    <string name="settings">Настройки</string>
+    <string name="ext">Выход</string>
+    <string name="looking">Просмотр</string>
 </resources>
