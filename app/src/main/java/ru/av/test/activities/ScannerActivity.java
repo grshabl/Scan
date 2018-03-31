@@ -51,6 +51,7 @@ public class ScannerActivity extends Activity {
     public static TextView description, qrCode, pdf417Code, boxCount;
     SQLiteDatabase db;
     private static BarCodeRes barCodeRes;
+    boolean enable = true;
 
     public static class ScanResultReceiver extends BroadcastReceiver {
         @Override
@@ -58,7 +59,7 @@ public class ScannerActivity extends Activity {
             if (iScanner != null) try {
                 mDecodeResult.recycle();
                 iScanner.aDecodeGetResult(mDecodeResult);
-                barCode = mDecodeResult.toString();
+                barCode = mDecodeResult.toString(); /*расшифровка*/
                 if (barCode.equals("READ_FAIL"))
                     Toast.makeText(context, "Просканируй еще раз", Toast.LENGTH_LONG).show();
                 else barCodeRes.setBarCode();
@@ -71,7 +72,9 @@ public class ScannerActivity extends Activity {
     public class BarCodeRes {
 
         public void setBarCode() {
-            if (barCode.length() == 13)
+            if(barCode.length()!=14 && barCode.length()!= 13 && instance.getMaxCount()==instance.getCount())
+                alert("Было введено максимально допустимое количество бутылок");
+            else if (barCode.length() == 13)
                 setEan(barCode);
             else if (barCode.length() == 11 || barCode.length() == 33)
                 setQR(barCode);
@@ -97,11 +100,17 @@ public class ScannerActivity extends Activity {
                 alert("Товар не содержиться в данном PLOD");
                 return;
             }
-            if (indexes.size() == 1)
+            if (indexes.size() == 1) {
+                instance.setEAN(barcode);
                 index = indexes.get(0);
+                String[] s = helper2.getMultiplicity(index).split("~");
+                instance.setMaxCount(Integer.parseInt(s[s.length-1]));
+            }
             else index = -1;
             if (instance.isOpened() == 0) {
                 setText();
+                instance.setEAN(barcode);
+
                 instance.setOpened(1);
                 if (!dbUsing.isHavePlod(db, helper2.getColumn(indexes.get(0), 0)))
                     dbUsing.setPlod(db, helper2.getColumn(indexes.get(0), 0));
@@ -109,6 +118,7 @@ public class ScannerActivity extends Activity {
                 dbUsing.addBox(barCode, helper2.getColumn(indexes.get(0), 0), helper2.getColumn(indexes.get(0), 0), helper2.getColumn(indexes.get(0), 2), helper2.getColumn(indexes.get(0), 3), db);
             } else if (instance.isOpened() == 1) {
                 setText();
+                instance.setEAN(barcode);
                 dbUsing.changeEAN(db, barcode);
                 if (!dbUsing.isHavePlod(db, helper2.getColumn(indexes.get(0), 0)))
                     dbUsing.setPlod(db, helper2.getColumn(indexes.get(0), 0));
@@ -121,7 +131,7 @@ public class ScannerActivity extends Activity {
             if (qr == null)
                 return;
             if (instance.isOpened() == 0) {
-                alert("Сначала откройте коробку");
+                alert("Сначала просканируйте ШК бутылки");
                 return;
             }
             if (qr.length() == 11) {
@@ -133,17 +143,19 @@ public class ScannerActivity extends Activity {
                             qr.substring(7, 15).hashCode() >= helper2.getStMark(i).hashCode() &&
                             qr.substring(4, 7).hashCode() == helper2.getMart(i).hashCode()) {
                         index = i;
+                        String[] s = helper2.getMultiplicity(index).split("~");
+                        instance.setMaxCount(Integer.parseInt(s[s.length-1]));
                         if (dbUsing.canQR(db, qr)) {
                             if (instance.isQr()) {
                                 instance.setOpened(2);
                                 instance.setQr();
-                                qrCode.setText(qr.substring(4, 15));
+                                qrCode.setText(qr.substring(4, 7)+" "+qr.substring(7,15));
                                 dbUsing.changeQR(db, qr);
                                 return;
                             }
                             instance.setQr();
                             instance.setOpened(2);
-                            qrCode.setText(qr.substring(4, 15));
+                            qrCode.setText(qr.substring(4, 7)+" "+qr.substring(7,15));
                             dbUsing.setQRBottle(db, qr);
 
                         } else {
@@ -167,11 +179,11 @@ public class ScannerActivity extends Activity {
                     if (instance.isQr()) {
                         instance.setOpened(2);
                         instance.setQr();
-                        qrCode.setText(qr.substring(4, 15));
+                        qrCode.setText(qr.substring(4, 7)+" "+qr.substring(7,15));
                         dbUsing.changeQR(db, qr);
                         return;
                     }
-                    qrCode.setText(qr.substring(4, 15));
+                    qrCode.setText(qr.substring(4, 7)+" "+qr.substring(7,15));
                     dbUsing.setQRBottle(db, qr);
                     instance.setOpened(2);
                     instance.setQr();
@@ -185,16 +197,13 @@ public class ScannerActivity extends Activity {
                 alert("QR не входит в диапозоны");
                 return;
             }
-
-
         }
 
         public void setPDF417(String pdf417) {
             if (pdf417 == null)
                 return;
             if (instance.isOpened() == 0) {
-                alert("Сначала откройте коробку");
-                return;
+                alert("Сначала просканируйте ШК бутылки");
             }
 
             if (pdf417.length() == 68) {
@@ -227,7 +236,7 @@ public class ScannerActivity extends Activity {
                     alert("LPB уже был считан");
                     return;
                 }
-                String[] s = helper2.getMultiplicity(index).split("~");
+                String[] s = helper2.getMultiplicity(index).split("~"); /* Toast.makeText(getApplicationContext(),barCode.length(),Toast.LENGTH_SHORT);*/
                 boolean chooser = false;
                 for (String s1 : s) if (Integer.parseInt(s1) == instance.getCount()) chooser = true;
                 if (!chooser) {
@@ -249,6 +258,7 @@ public class ScannerActivity extends Activity {
                             instance.setCount(0);
                             instance.setOpened(0);
                             dialog.cancel();
+                            setEan(instance.getEAN());
                         }
                     });
                     AlertDialog alert = builder.create();
@@ -273,20 +283,23 @@ public class ScannerActivity extends Activity {
 
             }
         }
-
-        private void alert(String message) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(ScannerActivity.this);
-            builder.setTitle("Ошибка!")
-                    .setMessage(message)
-                    .setCancelable(false)
-                    .setNegativeButton("Закрыть",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
-            AlertDialog alert = builder.create();
-            alert.show();
+        private void alert(String message){
+            if (enable) {
+                enable = false;
+                AlertDialog.Builder builder = new AlertDialog.Builder(ScannerActivity.this);
+                builder.setTitle("Ошибка!")
+                        .setMessage(message)
+                        .setCancelable(false)
+                        .setNegativeButton("Закрыть",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                        enable = true;
+                                    }
+                                });
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
         }
     }
 

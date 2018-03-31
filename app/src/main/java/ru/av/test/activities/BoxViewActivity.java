@@ -45,8 +45,10 @@ public class BoxViewActivity extends Activity {
     private static SQLiteDatabase db;
     private static List<Items> list;
     private static RecyclerView rv;
+    private static WriteSingleton singleton;
     private static Context context2;
     private static int flag = 0;
+    private static TextView txt;
 
     private static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -68,7 +70,7 @@ public class BoxViewActivity extends Activity {
                 try {
                     mDecodeResult.recycle();
                     iScanner.aDecodeGetResult(mDecodeResult);
-                    barCode = mDecodeResult.toString();
+                    barCode = mDecodeResult.toString(); //ра
                     if (dbUsing.getId(db, barCode) != -1 && dbUsing.getLpb(db, dbUsing.getId(db, barCode)).equals(barCode)) {
 
 
@@ -336,11 +338,12 @@ public class BoxViewActivity extends Activity {
     private static void initializeData() {
 
         list = new ArrayList<>();
-        String qr, pdf417;
+        String qr, pdf417,tmp;
         final Box boxes = dbUsing.getBottles(db, Integer.parseInt(BoxesViewActivity.boxId));
         if (boxes != null && boxes.bottles != null)
             for (int i = 0; i < boxes.bottles.size(); i++) {
-                qr = boxes.bottles.get(i).qr.substring(4, 15);
+                tmp = boxes.bottles.get(i).qr;
+                qr = tmp.substring(4, 7)+" "+tmp.substring(7,15);;
                 if (boxes.bottles.get(i).pdf417.equals("1")) {
                     pdf417 = "Не считан";
                 } else {

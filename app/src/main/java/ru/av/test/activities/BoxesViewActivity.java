@@ -47,6 +47,7 @@ public class BoxesViewActivity extends AppCompatActivity {
     private static RecyclerView rv;
     private static DBUsing dbUsing;
     public static BoxesAdapterView adapter;
+    private WriteSingleton singleton;
     public static String boxId;
     private static SQLiteDatabase db;
 
@@ -65,6 +66,7 @@ public class BoxesViewActivity extends AppCompatActivity {
                         boxId = String.valueOf(dbUsing.getId(db, mDecodeResult.toString()));
                         Intent intent1 = new Intent(context, BoxViewActivity.class);
                         intent.putExtra("boxId", dbUsing.getId(db, mDecodeResult.toString()));
+                        intent.putExtra("boxname", dbUsing.getId(db, mDecodeResult.toString()));
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                         context.startActivity(intent1);
                     } else {
@@ -95,6 +97,7 @@ public class BoxesViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.boxes_view_layout);
+        singleton = WriteSingleton.getInstance();
         context = this;
         dbUsing = new DBUsing(this);
         db = dbUsing.getWritableDatabase();
@@ -131,8 +134,8 @@ public class BoxesViewActivity extends AppCompatActivity {
                 alert.show();
 
                 File file = new File(PlodChooseActivity.dir);
-                if(file.exists())
-                file.delete();
+                //if(file.exists())
+                //file.delete();
                 ArrayList<String> arrayList = dbUsing.getPlods(db);
                 if(arrayList!=null) {
                     for (String s : arrayList) {

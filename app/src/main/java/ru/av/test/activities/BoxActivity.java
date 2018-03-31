@@ -27,6 +27,7 @@ public class BoxActivity extends Activity {
     private List<Items> list;
     private RecyclerView rv;
     private BoxSingleton boxSingleton;
+    private Intent intent;
 
 
     @Override
@@ -43,16 +44,20 @@ public class BoxActivity extends Activity {
 
 
         dbUsing = new DBUsing(this);
+        intent = getIntent();
         db = dbUsing.getWritableDatabase();
         boxSingleton = BoxSingleton.getInstance(this);
         Box boxl = dbUsing.getBottles(db, dbUsing.getId(db));
         Button deleteBox = findViewById(R.id.eraseBox);
-
+        String tmp;
         if (boxl != null && boxl.bottles != null)
             for (int i = 0; i < boxl.bottles.size(); i++) {
                 if (!boxl.bottles.get(i).qr.equals("0") && !boxl.bottles.get(i).pdf417.equals("0")) {
 
-                    qr = boxl.bottles.get(i).qr.substring(4, 15);
+                    tmp = boxl.bottles.get(i).qr;
+                    qr = tmp.substring(4, 7)+" "+tmp.substring(7,15);
+
+                    //qr = boxl.bottles.get(i).qr.substring(4, 15);
 
                     if (boxl.bottles.get(i).pdf417.equals("1")) {
                         pdf417 = "Не считан";
@@ -64,7 +69,7 @@ public class BoxActivity extends Activity {
             }
 
 
-
+        initializeAdapter();
         deleteBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

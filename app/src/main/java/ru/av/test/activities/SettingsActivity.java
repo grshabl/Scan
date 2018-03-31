@@ -26,6 +26,7 @@ public class SettingsActivity extends Activity {
     private DBUsing dbUsing;
     private Context context;
     private SQLiteDatabase db;
+    private WriteSingleton singleton;
     private Spinner spinner;
     private ArrayAdapter<String> adapter;
 
@@ -47,6 +48,7 @@ public class SettingsActivity extends Activity {
         db = dbUsing.getWritableDatabase();
         context = this;
         final Activity activity = this;
+        singleton = WriteSingleton.getInstance();
         editText.setHint(dbUsing.getTemplateName(db));
         Button button = findViewById(R.id.chooseTemplate);
         Button button1 = findViewById(R.id.deletePlod);

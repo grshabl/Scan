@@ -32,6 +32,7 @@ import ru.av.test.util.WriteSingleton;
 import static ru.av.test.Data.BoxSingleton.helper2;
 
 
+
 public class PlodChooseActivity extends Activity {
     private DBUsing dbUsing;
     private SQLiteDatabase db;
@@ -103,7 +104,7 @@ public class PlodChooseActivity extends Activity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestForPermission();
         }
-        File file = new File("/storage/sdcard1/AvExchange/In");
+        File file = new File("/storage/sdcard0/AvExchange/In");
         File[] files = file.listFiles();
 
         File temp = new File("/storage/emulated/0/Temp/Av/tmp.txt");
@@ -210,6 +211,8 @@ public class PlodChooseActivity extends Activity {
     }
 
 
+    // Проходимся по содержимому папки. Если это .csv файл, то из названия берем
+    // PLOD и его дату, тем самым составляем лист для выпадающего списка
     private ArrayList<String> getPlodNames() {
         list = new ArrayList<>();
         helper2 = new CSVReadingHelper(dir);
