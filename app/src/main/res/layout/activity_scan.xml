@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:id="@+id/editCode"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/code"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_weight="1"
+            android:layout_toStartOf="@+id/enterCode" />
+
+        <Button
+            android:id="@+id/enterCode"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.1"
+            android:text="@string/ok" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tovar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/goods" />
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_below="@id/tovar" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_weight="0.16">
+
+        <TextView
+            android:id="@+id/qrtext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:text="@string/qr" />
+
+        <TextView
+            android:id="@+id/qrcode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/qrtext" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_weight="0.71">
+
+        <TextView
+            android:id="@+id/pdf417Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pdf417" />
+
+        <TextView
+            android:id="@+id/pdf417code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/pdf417Text" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id = "@+id/count"
+        android:layout_width="match_parent"
+        android:onClick="onClick"
+        android:layout_height="30dp">
+
+        <TextView
+            android:id="@+id/boxCountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/inbox" />
+
+        <TextView
+            android:id="@+id/boxCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/boxCountText"
+            android:text="0" />
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <Button
+            android:id="@+id/erase"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:onClick="onClick"
+            android:layout_weight="1"
+            android:text="@string/dataclear" />
+
+        <Button
+            android:id="@+id/cantPdf"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:onClick="onClick"
+            android:text="@string/pdfwork" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
