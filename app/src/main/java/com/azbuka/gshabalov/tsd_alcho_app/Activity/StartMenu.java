@@ -44,7 +44,8 @@ public class StartMenu extends BaseActivity {
 
 
             case R.id.view:
-
+                intent = new Intent(this, ViewActivity.class);
+                startActivity(intent);
                 break;
 
 

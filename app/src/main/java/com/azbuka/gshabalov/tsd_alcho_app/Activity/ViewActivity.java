@@ -70,7 +70,7 @@ public class ViewActivity extends Activity {
                     mDecodeResult.recycle();
                     iScanner.aDecodeGetResult(mDecodeResult);
                     barcode = mDecodeResult.toString();
-                    Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE+" WHERE "+Database.LPB" = "+barcode);
+                    Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE+" WHERE "+Database.GOODS_LPB+" = "+barcode);
                     if(c.moveToFirst()) {
                         Intent intent1 = new Intent(context, BoxViewActivity.class);
                         intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
