@@ -2,11 +2,13 @@ package com.azbuka.gshabalov.tsd_alcho_app.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.azbuka.gshabalov.tsd_alcho_app.R;
@@ -20,6 +22,8 @@ public class Settings extends Activity {
     Spinner spinner;
     Database readDatabase;
     SQLiteDatabase readBase;
+    SharedPreferences sPref;
+    EditText template;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,7 @@ public class Settings extends Activity {
         setContentView(R.layout.activity_settings);
         ArrayList<String> plodNames = new ArrayList<>();
 
+        template = findViewById(R.id.edittextishe);
         readDatabase = new Database(this);
         readBase = readDatabase.getWritableDatabase();
         Cursor cursor = readBase.query(true, Database.DATABASE_WRITE, new String[]{Database.PLOD}, null, null, Database.PLOD, null, null, null);
@@ -55,8 +60,7 @@ public class Settings extends Activity {
 
 
             case R.id.chooseTemplate:
-                //saveText(spinner.getSelectedItem().toString(), current);
-
+                saveText(template.getText().toString());
                 break;
 
 
@@ -65,6 +69,13 @@ public class Settings extends Activity {
 
     private void clearbase() {
         readBase.delete(Database.DATABASE_SCAN, Database.PLOD, new String[]{spinner.getSelectedItem().toString()});
+    }
+
+    void saveText(String lpb) {
+        sPref = getSharedPreferences("DataShared", MODE_PRIVATE);
+        SharedPreferences.Editor ed = sPref.edit();
+        ed.putString(Database.GOODS_LPB, lpb);
+        ed.apply();
     }
 
     private void outData(SQLiteDatabase db){

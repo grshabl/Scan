@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +38,7 @@ public class ScanActivity extends BaseActivity {
     private String[] data; // EAN, QR, PDF
     private TextView description, qrCode, pdf417Code, boxCount;
     private EditText code;
+    private Button entercode;
     Database database;
     SQLiteDatabase readBase;
     ContentValues contentValues;
@@ -50,6 +52,7 @@ public class ScanActivity extends BaseActivity {
     private String goodsCode;
     private String markbad;
     private String boxean;
+    private String lpb;
     private String multiplicity;
     private Boolean scanenable = true;
 
@@ -59,15 +62,21 @@ public class ScanActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
+        entercode = findViewById(R.id.enterCode);
         barScan = new BarScan();
         sPref = getSharedPreferences("DataShared", MODE_PRIVATE);
         plod = sPref.getString(Database.PLOD, "");
         boxean = sPref.getString(Database.BOX_EAN, "");
-        if(boxean!= null && !boxean.equals("")){
-            inPlod(boxean);
+        database = new Database(this);
+        readBase = database.getWritableDatabase();
+        description = findViewById(R.id.description);
+        data = new String[3];
+
+        if (boxean != null && !boxean.equals("")) {
+            data[0] = boxean;
+            checkInPlod(boxean);
             description.setText(sPref.getString(Database.GOODS_NAME, ""));
         }
-
 
 
         PackageManager pm = ScanActivity.this.getPackageManager();
@@ -75,13 +84,9 @@ public class ScanActivity extends BaseActivity {
         pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP);
 
-        database = new Database(this);
-        readBase = database.getWritableDatabase();
-
         contentValues = new ContentValues();
         qrCode = findViewById(R.id.qrcode);
         pdf417Code = findViewById(R.id.pdf417code);
-        description = findViewById(R.id.description);
         boxCount = findViewById(R.id.boxCount);
         boxCount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,9 +95,16 @@ public class ScanActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-        code = findViewById(R.id.code);
 
-        data = new String[3];
+        entercode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                barScan.chooseType(code.getText().toString());
+
+            }
+        });
+
+        code = findViewById(R.id.code);
         multiplicity = "0";
         markbad = "0";
         boxCount.setText(boxcount().toString());
@@ -153,7 +165,7 @@ public class ScanActivity extends BaseActivity {
         contentValues.put(Database.QR, data[1]);
         contentValues.put(Database.PDF417, data[2]);
         contentValues.put(Database.MARK_BAD, markbad);
-        contentValues.put(Database.BOX_EAN, boxean);
+        contentValues.put(Database.BOX_EAN, lpb);
         contentValues.put(Database.MULTIPLICITY, multiplicity);
 
         readBase.insert(Database.DATABASE_SCAN, null, contentValues);
@@ -162,64 +174,78 @@ public class ScanActivity extends BaseActivity {
 
     }
 
+    private boolean lpb(String str){
+        String template = sPref.getString(Database.GOODS_LPB, "LPB-??????????");
+        return (str.startsWith(template.split("/?")[0]) && str.length() == template.length());
+    }
+
     public class BarScan {
         private void chooseType(String scanStr) {
-            if (scanenable) {
-                switch (scanStr.length()) {
-                    case 13:
-                        if (checkScan() && data[0] != null) {
-                            Alert("Сначала закройте коробку");
-                        } else {
-                            if (checkInPlod(scanStr)) {
-                                data[0] = scanStr; //EAN13
-                            }
-                        }
-                        break;
-
-                    case 11:
-                        if (scanStr.equals(data[1]) && qrnew(scanStr)) {
-                            Alert("QR уже был считан");
-                        } else if (data[0] == null) {
-                            Alert("Необходимо просканировать ШК бутылки");
-                        } else {
-                            if (checkQR(scanStr.substring(7, 15))) {
-                                data[1] = errorQR(scanStr); //QR scan
-                                qrDestroy(scanStr);
-                            } else {
-                                Alert("QR не входит в диапазоны марок");
-                            }
-                        }
-                        break;
-
-                    case 33:
-                        if (data[0] == null) {
-                            Alert("Необходимо просканировать ШК бутылки");
-                        } else if (scanStr.equals(data[1]) && qrnew(scanStr)) {
-                            Alert("QR уже был считан");
-                        } else {
-                            if (checkQR(scanStr.substring(7, 15))) {
-                                data[1] = scanStr; //QR scan
-                                qrDestroy(scanStr);
-                            } else {
-                                Alert("QR не входит в диапазоны марок");
-                            }
-                        }
-                        break;
-
-                    case 68:
-                        if (data[0] != null) {
-                            data[2] = scanStr; //PDF
-                            pdf417Code.setText("считан");
-                        } else {
-                            Alert("Необходимо просканировать ШК бутылки");
-                        }
-                        break;
-
-                    default:
-                        Alert("Неизвестный код");
-                        break;
+            if (lpb(scanStr)) {
+                if (data[1] == null && data[2] == null){
+                    lpb = scanStr;
+                    twoInOne();
+                } else {
+                    Alert("Сначала закончите сканирование бутылки");
                 }
+            } else {
+                if (scanenable) {
+                    switch (scanStr.length()) {
+                        case 13:
+                            if (checkScan() && data[0] != null) {
+                                Alert("Сначала закройте коробку");
+                            } else {
+                                if (checkInPlod(scanStr)) {
+                                    data[0] = scanStr; //EAN13
+                                }
+                            }
+                            break;
 
+                        case 11:
+                            if (data[0] == null) {
+                                Alert("Необходимо просканировать ШК бутылки");
+                            } else if (errorQR(scanStr).equals(data[1]) || qrnew(errorQR(scanStr))) {
+                                Alert("QR уже был считан");
+                            } else {
+                                if (checkQR(scanStr.substring(3, 11))) {
+                                    data[1] = errorQR(scanStr); //QR scan
+                                    qrDestroy(errorQR(scanStr));
+                                } else {
+                                    Alert("QR не входит в диапазоны марок");
+                                }
+                            }
+                            break;
+
+                        case 33:
+                            if (data[0] == null) {
+                                Alert("Необходимо просканировать ШК бутылки");
+                            } else if (scanStr.equals(data[1]) || qrnew(scanStr)) {
+                                Alert("QR уже был считан");
+                            } else {
+                                if (checkQR(scanStr.substring(7, 15))) {
+                                    data[1] = scanStr; //QR scan
+                                    qrDestroy(scanStr);
+                                } else {
+                                    Alert("QR не входит в диапазоны марок");
+                                }
+                            }
+                            break;
+
+                        case 68:
+                            if (data[0] != null) {
+                                data[2] = scanStr; //PDF
+                                pdf417Code.setText("считан");
+                            } else {
+                                Alert("Необходимо просканировать ШК бутылки");
+                            }
+                            break;
+
+                        default:
+                            Alert("Неизвестный код");
+                            break;
+                    }
+
+                }
                 checkFull();
             }
         }
@@ -244,7 +270,7 @@ public class ScanActivity extends BaseActivity {
 
 
     private void checkFull() {
-        if (data[1] != null && data[2] != null) {
+        if (data[1] != null && data[2] != null && data[0] != null) {
             addBottleInDB();
             data[1] = null;
             data[2] = null;
@@ -254,7 +280,7 @@ public class ScanActivity extends BaseActivity {
     }
 
     private boolean qrnew(String qr) {
-        return readBase.query(Database.DATABASE_SCAN, pole, Database.QR + " = '" + qr + "'", null, null, null, null).getCount() == 0;
+        return readBase.query(Database.DATABASE_SCAN, new String[]{Database.QR}, Database.QR + " = '" + qr + "'", null, null, null, null).getCount() != 0;
     }
 
     public void Alert(String msg) {
@@ -274,7 +300,7 @@ public class ScanActivity extends BaseActivity {
         alert.show();
     }
 
-    private void chooseAlert(){
+    private void chooseAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);
         builder.setTitle("Внимание!").setMessage("Количество просканированных бутылок (" + boxCount.getText().toString() + ") не соответсвует кратности (" + multiplicity.replace("~", ".") + ") .Продолжить? ").setCancelable(false).setNegativeButton("Закрыть", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -295,7 +321,6 @@ public class ScanActivity extends BaseActivity {
         switch (v.getId()) {
 
             case R.id.erase:
-                data[0] = null;
                 data[1] = null;
                 data[2] = null;
                 qrCode.setText("");
@@ -306,6 +331,7 @@ public class ScanActivity extends BaseActivity {
                 data[2] = "0";
                 markbad = "1";
                 pdf417Code.setText("Не считан");
+                checkFull();
                 break;
 
 
