@@ -113,7 +113,7 @@ public class ViewActivity extends Activity {
         context = this;
         database = new Database(this);
         readBase = database.getWritableDatabase();
-        
+
         //component1 = new ComponentName(this,ScanResultReceiver.class);
         initializeData();
 

@@ -113,6 +113,8 @@ public class BoxViewActivity extends Activity {
         setContentView(R.layout.activity_box_view);
         activity = this;
         intent = getIntent();
+        TextView lpbText = findViewById(R.id.lpbText);
+        lpbText.setText(ViewActivity.boxId);
         rv = (RecyclerView) findViewById(R.id.boxViewList);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
