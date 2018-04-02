@@ -296,7 +296,8 @@ public class BoxViewActivity extends Activity {
         if(c.moveToFirst()){
             do{
                 if(c.getString(8).equals(ViewActivity.boxId)) {
-                    list.add(new Items(c.getString(5), c.getString(6).length() > 1 ? "Считан" : "Не считан"));
+                    list.add(new Items(c.getString(4).length()<12?c.getString(4).substring(4,15):c.getString(4),
+                            c.getString(5).length() > 1 ? "Считан" : "Не считан"));
                 }
             }while(c.moveToNext());
         }
