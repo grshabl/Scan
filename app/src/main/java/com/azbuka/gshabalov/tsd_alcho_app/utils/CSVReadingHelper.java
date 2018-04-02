@@ -58,7 +58,7 @@ public class CSVReadingHelper {
         contentValues.put(Database.PLOD, plodnum);
         contentValues.put(Database.PLOD_DAY, day);
         contentValues.put(Database.PLOD_LINE, plodline);
-        contentValues.put(Database.GOODS_LINE, goodsLine);
+        contentValues.put(Database.GOODS_CODE, goodsLine);
         contentValues.put(Database.BOX_EAN, ean13);
         contentValues.put(Database.GOODS_NAME, goodname);
         contentValues.put(Database.SERIAL, markserial);
