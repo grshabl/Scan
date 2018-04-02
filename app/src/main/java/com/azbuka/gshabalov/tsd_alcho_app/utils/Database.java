@@ -32,6 +32,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String SERIAL = "serial";
     public static final String GOODS_CODE = "goodscode";
     public static final String GOODS_NAME = "goodsName";
+    public static final String GOODS_LPB = "lpb";
 
 
 
@@ -46,13 +47,13 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL("create table " + DATABASE_WRITE + "(" + BOTTLE_ID
                 + " integer primary key," + PLOD + " text," + PLOD_LINE + " text," + GOODS_CODE + " text," + QR +" text,"
                 + PDF417 + " text," + MARK_BAD + " text,"
-                + BOX_EAN + " text," + MULTIPLICITY + " text" + ")");
+                + GOODS_LPB + " text," + MULTIPLICITY + " text" + ")");
 
 
         db.execSQL("create table " + DATABASE_SCAN + "(" + BOTTLE_ID
                 + " integer primary key," + PLOD + " text," + PLOD_LINE + " text," + GOODS_CODE + " text," + QR +" text,"
                 + PDF417 + " text," + MARK_BAD + " text,"
-                + BOX_EAN + " text," + MULTIPLICITY + " text" + ")");
+                + GOODS_LPB + " text," + MULTIPLICITY + " text" + ")");
 
 
         db.execSQL("create table " + DATABASE_READ + "(" + LINE

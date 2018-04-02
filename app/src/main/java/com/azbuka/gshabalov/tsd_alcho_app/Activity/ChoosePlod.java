@@ -43,6 +43,9 @@ public class ChoosePlod extends BaseActivity {
         ArrayList<String> plodNames = new ArrayList<>();
         sPref = getSharedPreferences("DataShared", MODE_PRIVATE);
         current = sPref.getString(Database.DATABASE_FILENAME, "");
+        readDatabase = new Database(this);
+        readBase = readDatabase.getWritableDatabase();
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestForPermission();
@@ -54,7 +57,7 @@ public class ChoosePlod extends BaseActivity {
 
         if (files.length != 0) {
             for (File f : files) {
-                if (f.toString().hashCode() > current.hashCode()) {
+                if (f.toString().hashCode() > current.hashCode() || current.equals("")) {
                     current = f.toString();
                     clearbase();
                     Alert("Список PLOD был обновлен");
@@ -66,9 +69,7 @@ public class ChoosePlod extends BaseActivity {
             Alert("Папка пуста или файлы не распознаны");
         }
 
-        readDatabase = new Database(this);
         csvReadingHelper = new CSVReadingHelper(current, readDatabase);
-        readBase = readDatabase.getWritableDatabase();
         Cursor cursor = readBase.query(true, Database.DATABASE_READ, new String[]{Database.PLOD}, null, null, Database.PLOD, null, null, null);
         if (cursor.moveToFirst()) {
             int index = cursor.getColumnIndex(Database.PLOD);
@@ -115,7 +116,7 @@ public class ChoosePlod extends BaseActivity {
     }
 
     private void clearbase() {
-        readBase.delete(Database.DATABASE_READ, null, null);
+            readBase.delete(Database.DATABASE_READ, null, null);
     }
 
     private boolean canAccessExternalSd() {
@@ -136,7 +137,7 @@ public class ChoosePlod extends BaseActivity {
 
     public void Alert(String msg) {
         AlertDialog.Builder builder = new AlertDialog.Builder(ChoosePlod.this);
-        builder.setTitle("Ошибка")
+        builder.setTitle("Информация")
                 .setMessage(msg)
                 .setCancelable(false)
                 .setNegativeButton("ОК",

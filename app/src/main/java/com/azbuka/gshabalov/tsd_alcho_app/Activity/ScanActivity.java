@@ -53,7 +53,7 @@ public class ScanActivity extends BaseActivity {
     private String multiplicity;
     private Boolean scanenable = true;
 
-    String[] pole = {Database.STARTNUM, Database.ENDNUM, Database.GOODS_NAME, Database.GOODS_CODE, Database.PLOD_LINE, Database.QR, Database.MULTIPLICITY};
+    String[] pole = {Database.STARTNUM, Database.ENDNUM, Database.GOODS_NAME, Database.GOODS_CODE, Database.PLOD_LINE, Database.MULTIPLICITY};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
