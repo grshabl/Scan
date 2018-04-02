@@ -4,17 +4,16 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,7 +22,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.azbuka.gshabalov.tsd_alcho_app.BaseActivity;
 import com.azbuka.gshabalov.tsd_alcho_app.R;
@@ -31,7 +29,6 @@ import com.azbuka.gshabalov.tsd_alcho_app.utils.BoxesAdapterView;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Database;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Items;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -70,10 +67,11 @@ public class ViewActivity extends Activity {
                     mDecodeResult.recycle();
                     iScanner.aDecodeGetResult(mDecodeResult);
                     barcode = mDecodeResult.toString();
-                    Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE+" WHERE "+Database.GOODS_LPB+" = "+barcode);
+                    Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE+" WHERE "+Database.GOODS_LPB+" = "+barcode,null);
                     if(c.moveToFirst()) {
                         Intent intent1 = new Intent(context, BoxViewActivity.class);
                         intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                        boxId = barcode;
                         intent1.putExtra("boxId", barcode);
                         context.startActivity(intent1);
 
@@ -115,6 +113,19 @@ public class ViewActivity extends Activity {
         context = this;
         database = new Database(this);
         readBase = database.getWritableDatabase();
+        for(int i=0;i<20;i++) {
+            ContentValues values = new ContentValues();
+            values.put(Database.PLOD, "asd");
+            values.put(Database.PLOD_LINE, "asd");
+            values.put(Database.GOODS_CODE, "asd");
+            values.put(Database.QR, "asdds");
+            values.put(Database.PDF417, "asdasd");
+            values.put(Database.MARK_BAD, "asd");
+            values.put(Database.BOX_EAN, "asdasd");
+            values.put(Database.GOODS_LPB, i<10?"LPB-1234567890":"LPB-9876543210");
+            values.put(Database.MULTIPLICITY, "0");
+            readBase.insert(Database.DATABASE_WRITE, null, values);
+        }
         //component1 = new ComponentName(this,ScanResultReceiver.class);
         initializeData();
 
@@ -149,7 +160,8 @@ public class ViewActivity extends Activity {
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         //Вводим текст и отображаем в строке ввода на основном экране:
-                                        Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE+" WHERE "+Database.LPB" = "+userInput.getText());
+                                        Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE+" WHERE "+
+                                                Database.GOODS_LPB+" = "+userInput.getText(),null);
                                         if(c.moveToFirst()){
                                             Intent intent = new Intent(context, BoxViewActivity.class);
                                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
@@ -193,10 +205,7 @@ public class ViewActivity extends Activity {
         });
         initializeAdapter();
 
-        PackageManager pm = ViewActivity.this.getPackageManager();
-        ComponentName componentName = new ComponentName(ViewActivity.this, ScanResultReceiver.class);
-        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
+
         try {
             initScanner();
         } catch (RemoteException e) {
@@ -230,7 +239,7 @@ public class ViewActivity extends Activity {
     public void onBackPressed() {
         // super.onBackPressed();
 
-        Intent intent = new Intent(getApplicationContext(), BaseActivity.class);
+        Intent intent = new Intent(getApplicationContext(), StartMenu.class);
         startActivity(intent);
 
     }
@@ -257,21 +266,21 @@ public class ViewActivity extends Activity {
 
     public static void initializeData() {
         ArrayList<Items> lbp = new ArrayList<>();
-        Cursor c = readBase.rawQuery("SELECT * FROM"+Database.DATABASE_WRITE,null);
+        Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE,null);
         Map<String,Integer> map = new HashMap<>();
-        String lpb;
+        String tmp;
         int count;
         ArrayList<String> lpblist = new ArrayList<>();
         if(c.moveToFirst()){
             do{
-                lpb = c.getString(9);
-                if(map.containsKey(lpb)) {
-                    count = map.get(lpb);
-                    map.put(lpb,count+1);
+                tmp = c.getString(8);
+                if(map.containsKey(tmp)) {
+                    count = map.get(tmp);
+                    map.put(tmp,count+1);
                 }
                 else {
-                    lpblist.add(lpb);
-                    map.put(lpb,1);
+                    lpblist.add(tmp);
+                    map.put(tmp,1);
                 }
             }while(c.moveToNext());
         }
@@ -282,6 +291,7 @@ public class ViewActivity extends Activity {
             item.setLpb(lpb1);
             lbp.add(item);
         }
+        list = lbp;
 
 
     }

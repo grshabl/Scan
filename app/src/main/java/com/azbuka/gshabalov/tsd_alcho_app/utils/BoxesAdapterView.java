@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.azbuka.gshabalov.tsd_alcho_app.Activity.BoxViewActivity;
+import com.azbuka.gshabalov.tsd_alcho_app.Activity.ViewActivity;
 import com.azbuka.gshabalov.tsd_alcho_app.R;
 
 import java.util.List;
@@ -72,6 +73,7 @@ public class BoxesAdapterView extends RecyclerView.Adapter<BoxesAdapterView.View
                 public void onClick(View view) {
                     Intent inten = new Intent(context, BoxViewActivity.class);
                     inten.putExtra("boxId", items.get(i).item1);
+                    ViewActivity.boxId = items.get(i).item1;
                     inten.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                     inten.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(inten);

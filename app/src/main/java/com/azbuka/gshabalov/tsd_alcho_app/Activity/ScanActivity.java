@@ -175,8 +175,8 @@ public class ScanActivity extends BaseActivity {
     }
 
     private boolean lpb(String str){
-        String template = sPref.getString(Database.GOODS_LPB, "LPB-??????????");
-        return (str.startsWith(template.split("/?")[0]) && str.length() == template.length());
+        String template = "LPB-??????????";
+        return (str.startsWith(template.substring(0,4)) && str.length() == template.length());
     }
 
     public class BarScan {
@@ -184,7 +184,8 @@ public class ScanActivity extends BaseActivity {
             if (lpb(scanStr)) {
                 if (data[1] == null && data[2] == null){
                     lpb = scanStr;
-                    twoInOne();
+
+                    twoInOne(lpb);
                 } else {
                     Alert("Сначала закончите сканирование бутылки");
                 }
@@ -309,7 +310,7 @@ public class ScanActivity extends BaseActivity {
         }).setPositiveButton("Ок", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int arg1) {
                 setMultiplicityError();
-                twoInOne();
+                twoInOne(lpb);
             }
         });
         AlertDialog alert = builder.create();
@@ -347,7 +348,7 @@ public class ScanActivity extends BaseActivity {
         qrCode.setText(qr.substring(4, 7) + " " + qr.substring(7, 15));
     }
 
-    private void twoInOne() {
+    private void twoInOne(String lpb) {
         Cursor c = readBase.rawQuery("SELECT * FROM " + Database.DATABASE_SCAN, null);
         ContentValues values;
         if (c.moveToFirst()) {
@@ -360,7 +361,8 @@ public class ScanActivity extends BaseActivity {
                 values.put(Database.PDF417, c.getString(5));
                 values.put(Database.MARK_BAD, c.getString(6));
                 values.put(Database.BOX_EAN, c.getString(7));
-                values.put(Database.MULTIPLICITY, c.getString(8));
+                values.put(Database.GOODS_LPB, lpb);
+                values.put(Database.MULTIPLICITY, c.getString(9));
                 readBase.insert(Database.DATABASE_WRITE, null, values);
             } while (c.moveToNext());
         }

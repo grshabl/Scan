@@ -72,7 +72,7 @@ public class BoxViewActivity extends Activity {
                     mDecodeResult.recycle();
                     iScanner.aDecodeGetResult(mDecodeResult);
                     barCode = mDecodeResult.toString(); //ра
-                    if (intent.getStringExtra("boxId").equals(barCode)) {
+                    if (ViewActivity.boxId.equals(barCode)) {
 
 
                         readBase.delete(Database.DATABASE_WRITE, "LPB = " + barCode, null);
@@ -112,7 +112,6 @@ public class BoxViewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_box_view);
         activity = this;
-        initializeData();
         intent = getIntent();
         rv = (RecyclerView) findViewById(R.id.boxViewList);
         LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -120,6 +119,7 @@ public class BoxViewActivity extends Activity {
         rv.setHasFixedSize(true);
         database = new Database(this);
         readBase = database.getWritableDatabase();
+        initializeData();
         initializeAdapter();
 
         Button button = (Button) findViewById(R.id.deleteBox);
@@ -154,7 +154,7 @@ public class BoxViewActivity extends Activity {
                     public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                         if(keyEvent.getAction()==keyEvent.ACTION_DOWN){
                             if(i == KeyEvent.KEYCODE_ENTER) {
-                                if (intent.getStringExtra("boxId").equals(userInput.getText())) {
+                                if (ViewActivity.boxId.equals(userInput.getText())) {
 
 
                                     readBase.delete(Database.DATABASE_WRITE, "LPB = " + userInput.getText(), null);
@@ -194,7 +194,7 @@ public class BoxViewActivity extends Activity {
                                     public void onClick(DialogInterface dialog, int id) {
                                         //Вводим текст и отображаем в строке ввода на основном экране:
 
-                                        if (intent.getStringExtra("boxId").equals(userInput.getText())) {
+                                        if (ViewActivity.boxId.equals(userInput.getText())) {
 
 
                                             readBase.delete(Database.DATABASE_WRITE, "LPB = " + userInput.getText(), null);
@@ -290,10 +290,12 @@ public class BoxViewActivity extends Activity {
     public static void initializeData(){
 
         list = new ArrayList<>();
-        Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE+" WHERE LPB = "+intent.getStringExtra("boxId"),null);
+        Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE,null);
         if(c.moveToFirst()){
             do{
-                list.add(new Items(c.getString(5),c.getString(6).length()>1?"Считан":"Не считан"));
+                if(c.getString(8).equals(ViewActivity.boxId)) {
+                    list.add(new Items(c.getString(5), c.getString(6).length() > 1 ? "Считан" : "Не считан"));
+                }
             }while(c.moveToNext());
         }
     }
