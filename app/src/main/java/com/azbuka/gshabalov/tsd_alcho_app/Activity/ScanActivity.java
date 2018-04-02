@@ -53,7 +53,7 @@ public class ScanActivity extends BaseActivity {
     private String multiplicity;
     private Boolean scanenable = true;
 
-    String[] pole = {Database.STARTNUM, Database.ENDNUM, Database.GOODS_NAME, Database.GOODS_CODE, Database.PLOD_LINE, Database.QR};
+    String[] pole = {Database.STARTNUM, Database.ENDNUM, Database.GOODS_NAME, Database.GOODS_CODE, Database.PLOD_LINE, Database.QR, Database.MULTIPLICITY};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,10 +127,12 @@ public class ScanActivity extends BaseActivity {
             int end = cursor.getColumnIndex(Database.ENDNUM);
             int plodline = cursor.getColumnIndex(Database.PLOD_LINE);
             int goodscode = cursor.getColumnIndex(Database.GOODS_CODE);
+            int multiplicity = cursor.getColumnIndex(Database.MULTIPLICITY);
             do {
                 if (cursor.getString(start).hashCode() <= qr.hashCode() && cursor.getString(end).hashCode() >= qr.hashCode()) {
                     this.plodLine = cursor.getString(plodline);
                     this.goodsCode = cursor.getString(goodscode);
+                    this.multiplicity = cursor.getString(multiplicity);
                     include = true;
                 }
             } while (cursor.moveToNext());
@@ -181,7 +183,7 @@ public class ScanActivity extends BaseActivity {
                             Alert("Необходимо просканировать ШК бутылки");
                         } else {
                             if (checkQR(scanStr.substring(7, 15))) {
-                                data[1] = scanStr; //QR scan
+                                data[1] = errorQR(scanStr); //QR scan
                                 qrDestroy(scanStr);
                             } else {
                                 Alert("QR не входит в диапазоны марок");
@@ -274,7 +276,7 @@ public class ScanActivity extends BaseActivity {
 
     private void chooseAlert(){
         AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);
-        builder.setTitle("Внимание!").setMessage("Количество просканированных бутылок (" + boxCount.getText().toString() + ") не соответсвует кратности (" + "" + ") .Продолжить? ").setCancelable(false).setNegativeButton("Закрыть", new DialogInterface.OnClickListener() {
+        builder.setTitle("Внимание!").setMessage("Количество просканированных бутылок (" + boxCount.getText().toString() + ") не соответсвует кратности (" + multiplicity.replace("~", ".") + ") .Продолжить? ").setCancelable(false).setNegativeButton("Закрыть", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();
             }
@@ -302,6 +304,7 @@ public class ScanActivity extends BaseActivity {
 
             case R.id.cantPdf:
                 data[2] = "0";
+                markbad = "1";
                 pdf417Code.setText("Не считан");
                 break;
 

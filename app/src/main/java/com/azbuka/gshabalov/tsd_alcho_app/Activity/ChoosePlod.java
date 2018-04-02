@@ -54,7 +54,7 @@ public class ChoosePlod extends BaseActivity {
 
         if (files.length != 0) {
             for (File f : files) {
-                if (f.toString().hashCode() > current.hashCode()) { // не уверен что работает
+                if (f.toString().hashCode() > current.hashCode()) {
                     current = f.toString();
                     clearbase();
                     Alert("Список PLOD был обновлен");
