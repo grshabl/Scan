@@ -113,19 +113,7 @@ public class ViewActivity extends Activity {
         context = this;
         database = new Database(this);
         readBase = database.getWritableDatabase();
-        for(int i=0;i<20;i++) {
-            ContentValues values = new ContentValues();
-            values.put(Database.PLOD, "asd");
-            values.put(Database.PLOD_LINE, "asd");
-            values.put(Database.GOODS_CODE, "asd");
-            values.put(Database.QR, "asdds");
-            values.put(Database.PDF417, "asdasd");
-            values.put(Database.MARK_BAD, "asd");
-            values.put(Database.BOX_EAN, "asdasd");
-            values.put(Database.GOODS_LPB, i<10?"LPB-1234567890":"LPB-9876543210");
-            values.put(Database.MULTIPLICITY, "0");
-            readBase.insert(Database.DATABASE_WRITE, null, values);
-        }
+        
         //component1 = new ComponentName(this,ScanResultReceiver.class);
         initializeData();
 
