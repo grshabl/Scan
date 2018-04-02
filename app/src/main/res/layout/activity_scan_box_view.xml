@@ -18,6 +18,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:onClick="onClick"
+        android:onClick="delClick"
         />
 </LinearLayout>

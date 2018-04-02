@@ -25,7 +25,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class ChoosePlod extends BaseActivity {
-    File current;
+    String current;
     SharedPreferences sPref;
     Database readDatabase;
     SQLiteDatabase readBase;
@@ -42,6 +42,7 @@ public class ChoosePlod extends BaseActivity {
         setContentView(R.layout.activity_choose_plod);
         ArrayList<String> plodNames = new ArrayList<>();
         sPref = getSharedPreferences("DataShared", MODE_PRIVATE);
+        current = sPref.getString(Database.DATABASE_FILENAME, "");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestForPermission();
@@ -52,11 +53,13 @@ public class ChoosePlod extends BaseActivity {
         File[] files = file.listFiles();
 
         if (files.length != 0) {
-            current = files[0];
             for (File f : files) {
-                if (f.toString().hashCode() > current.toString().hashCode()) { // не уверен что работает
-                    current = f;
+                if (f.toString().hashCode() > current.hashCode()) { // не уверен что работает
+                    current = f.toString();
+                    clearbase();
+                    Alert("Список PLOD был обновлен");
                 }
+
             }
 
         } else {
@@ -64,7 +67,7 @@ public class ChoosePlod extends BaseActivity {
         }
 
         readDatabase = new Database(this);
-        csvReadingHelper = new CSVReadingHelper(current.toString(), readDatabase);
+        csvReadingHelper = new CSVReadingHelper(current, readDatabase);
         readBase = readDatabase.getWritableDatabase();
         Cursor cursor = readBase.query(true, Database.DATABASE_READ, new String[]{Database.PLOD}, null, null, Database.PLOD, null, null, null);
         if (cursor.moveToFirst()) {
@@ -86,7 +89,7 @@ public class ChoosePlod extends BaseActivity {
         switch (v.getId()) {
 
             case R.id.choosePlodButton:
-                saveText(spinner.getSelectedItem().toString(), current.toString());
+                saveText(spinner.getSelectedItem().toString(), current);
                 Intent intent = new Intent(this, ScanActivity.class);
                 this.startActivity(intent);
                 break;
@@ -111,6 +114,10 @@ public class ChoosePlod extends BaseActivity {
         return isPermissionOn;
     }
 
+    private void clearbase() {
+        readBase.delete(Database.DATABASE_READ, null, null);
+    }
+
     private boolean canAccessExternalSd() {
         return (hasPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE));
     }
@@ -123,7 +130,7 @@ public class ChoosePlod extends BaseActivity {
     void saveText(String plod, String filename) {
         SharedPreferences.Editor ed = sPref.edit();
         ed.putString(Database.PLOD, plod);
-        ed.putString("Filename", filename);
+        ed.putString(Database.DATABASE_FILENAME, filename);
         ed.apply();
     }
 

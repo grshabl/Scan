@@ -17,9 +17,6 @@ import com.azbuka.gshabalov.tsd_alcho_app.utils.Items;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Raushaniya on 02.04.18.
- */
 
 public class ScanBoxViewActivity extends Activity {
     private List<Items> list;
@@ -29,7 +26,7 @@ public class ScanBoxViewActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_box_view);
-        rv=(RecyclerView)findViewById(R.id.bottlesList);
+        rv=findViewById(R.id.bottlesList);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
         rv.setHasFixedSize(true);
@@ -50,7 +47,7 @@ public class ScanBoxViewActivity extends Activity {
         Button button = (Button)findViewById(R.id.eraseBox);
     }
 
-    public void onClick(View view) {
+    public void delClick(View view) {
         db.delete(Database.DATABASE_SCAN,"1",null);
         list = new ArrayList<>();
         initializeAdapter();
