@@ -19,6 +19,7 @@ import java.io.UnsupportedEncodingException;
 
 public class CSVReadingHelper {
     BufferedReader reader;
+    Database readdataBase;
     SQLiteDatabase readBase;
     ContentValues contentValues;
     private String[] fileString;

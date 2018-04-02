@@ -63,8 +63,8 @@ public class ChoosePlod extends BaseActivity {
             Alert("Папка пуста или файлы не распознаны");
         }
 
-        csvReadingHelper = new CSVReadingHelper(current.toString(), readDatabase);
         readDatabase = new Database(this);
+        csvReadingHelper = new CSVReadingHelper(current.toString(), readDatabase);
         readBase = readDatabase.getWritableDatabase();
         Cursor cursor = readBase.query(true, Database.DATABASE_READ, new String[]{Database.PLOD}, null, null, Database.PLOD, null, null, null);
         if (cursor.moveToFirst()) {
@@ -72,6 +72,7 @@ public class ChoosePlod extends BaseActivity {
             do {
                 plodNames.add(cursor.getString(index));
             } while (cursor.moveToNext());
+            cursor.close();
             spinner = findViewById(R.id.spinner);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, plodNames);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
