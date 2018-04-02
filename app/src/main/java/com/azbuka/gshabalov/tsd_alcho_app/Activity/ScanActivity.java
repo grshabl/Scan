@@ -22,8 +22,6 @@ import android.widget.Toast;
 import com.azbuka.gshabalov.tsd_alcho_app.BaseActivity;
 import com.azbuka.gshabalov.tsd_alcho_app.R;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Database;
-import com.azbuka.gshabalov.tsd_alcho_app.utils.ReadDatabase;
-import com.azbuka.gshabalov.tsd_alcho_app.utils.ScanDatabase;
 
 import device.scanner.DecodeResult;
 import device.scanner.IScannerService;
@@ -38,9 +36,7 @@ public class ScanActivity extends BaseActivity {
     SharedPreferences sPref;
     private String[] data; // EAN, QR, PDF
     public TextView description, qrCode, pdf417Code, boxCount;
-    ReadDatabase readDatabase;
-    ScanDatabase scandatabase;
-    Database proddatabase;
+    Database database;
     SQLiteDatabase sqanBase;
     SQLiteDatabase prodBase;
     SQLiteDatabase readBase;
@@ -57,7 +53,7 @@ public class ScanActivity extends BaseActivity {
     private Integer end;
     private String multiplicity;
 
-    String[] pole = {ReadDatabase.STARTNUM, ReadDatabase.ENDNUM};
+    String[] pole = {Database.STARTNUM, Database.ENDNUM};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,14 +69,10 @@ public class ScanActivity extends BaseActivity {
                 PackageManager.DONT_KILL_APP);
 
         data = new String[7];
-        scandatabase = new ScanDatabase(this);
-        proddatabase = new Database(this);
-        sqanBase = scandatabase.getWritableDatabase();
-        prodBase = proddatabase.getWritableDatabase();
-        contentValues = new ContentValues();
-        readDatabase = new ReadDatabase(this);
-        readBase = readDatabase.getWritableDatabase();
+        database = new Database(this);
+        readBase = database.getWritableDatabase();
 
+        contentValues = new ContentValues();
         qrCode = findViewById(R.id.qrcode);
         pdf417Code = findViewById(R.id.pdf417code);
         description = findViewById(R.id.description);
@@ -106,13 +98,13 @@ public class ScanActivity extends BaseActivity {
     private boolean checkQR(String qr) {
         Boolean include = false;
         if (cursor.moveToFirst()) {
-            int start = cursor.getColumnIndex(ReadDatabase.STARTNUM);
-            int end = cursor.getColumnIndex(ReadDatabase.ENDNUM);
+            int start = cursor.getColumnIndex(Database.STARTNUM);
+            int end = cursor.getColumnIndex(Database.ENDNUM);
             do {
                 if (cursor.getString(start).hashCode() < qr.hashCode() && cursor.getString(end).hashCode() > qr.hashCode()){
                     SharedPreferences.Editor ed = sPref.edit();
-                    ed.putString(ReadDatabase.STARTNUM, cursor.getString(start));
-                    ed.putString(ReadDatabase.ENDNUM, cursor.getString(end));
+                    ed.putString(Database.STARTNUM, cursor.getString(start));
+                    ed.putString(Database.ENDNUM, cursor.getString(end));
                     ed.apply();
                     include = true;
                 }
@@ -122,29 +114,26 @@ public class ScanActivity extends BaseActivity {
     }
 
     private Cursor inPlod(String ean) {
-        return readBase.query(ReadDatabase.DATABASE_NAME, pole, ReadDatabase.BOX_EAN + " = '" + ean + "' and " + ReadDatabase.PLOD + " ='" + plod + "'", null, null, null, null);
+        return readBase.query(Database.DATABASE_READ, pole, Database.BOX_EAN + " = '" + ean + "' and " + Database.PLOD + " ='" + plod + "'", null, null, null, null);
     }
 
     private void addBottleInDB() {
-        contentValues.put(ScanDatabase.PLOD, plod);
-        contentValues.put(ScanDatabase.PLOD_LINE, plodLine);
-        contentValues.put(ScanDatabase.GOODS_CODE, goodsCode);
-        contentValues.put(ScanDatabase.QR, data[1]);
-        contentValues.put(ScanDatabase.PDF417, data[2]);
-        contentValues.put(ScanDatabase.MARK_BAD, markbad);
-        contentValues.put(ScanDatabase.BOX_EAN, boxean);
-        contentValues.put(ScanDatabase.MULTIPLICITY, multiplicity);
+        contentValues.put(Database.PLOD, plod);
+        contentValues.put(Database.PLOD_LINE, plodLine);
+        contentValues.put(Database.GOODS_CODE, goodsCode);
+        contentValues.put(Database.QR, data[1]);
+        contentValues.put(Database.PDF417, data[2]);
+        contentValues.put(Database.MARK_BAD, markbad);
+        contentValues.put(Database.BOX_EAN, boxean);
+        contentValues.put(Database.MULTIPLICITY, multiplicity);
 
-        sqanBase.insert(ScanDatabase.DATABASE_NAME, null, contentValues);
+        sqanBase.insert(Database.DATABASE_SCAN, null, contentValues);
         contentValues.clear();
 
     }
 
     public class BarScan {
         private void chooseType(String scanStr) {
-            if (scanStr.length() == 13 && data[0] == null && checkInPlod(scanStr)) {
-                data[0] = scanStr;
-            } else {
                 switch (scanStr.length()) {
                     case 13:
                         if (checkScan()) {
@@ -159,11 +148,13 @@ public class ScanActivity extends BaseActivity {
                     case 11:
                         if (scanStr.equals(data[1])) {
                             Alert("QR уже был просканирован");
-                        } else {
+                        } else if (data[0] != null) {
                             if (Integer.parseInt(scanStr) >= start && Integer.parseInt(scanStr) <= end) {
                                 data[1] = errorQR(scanStr); //QR hand
-                                qrCode.setText(qrDestroy(scanStr));
+                                qrDestroy(scanStr);
                             }
+                        } else {
+                            Alert("Необходимо просканировать ШК бутылки");
                         }
                         break;
 
@@ -175,7 +166,7 @@ public class ScanActivity extends BaseActivity {
                         } else {
                             if (checkQR(scanStr.substring(7,15))) {
                                 data[1] = scanStr; //QR scan
-                                qrCode.setText(qrDestroy(scanStr.substring(4, 7) + " " + scanStr.substring(7, 15)));
+                                qrDestroy(scanStr);
                             }
                         }
                         break;
@@ -189,13 +180,13 @@ public class ScanActivity extends BaseActivity {
                         Alert("Неизвестный код");
                         break;
                 }
-            }
+
             checkFull();
         }
     }
 
     private void setMultiplicityError() {
-        sqanBase.execSQL(String.format("Update %s set %s = '1'", ScanDatabase.DATABASE_NAME, ScanDatabase.MULTIPLICITY));
+        sqanBase.execSQL(String.format("Update %s set %s = '1'", Database.DATABASE_SCAN, Database.MULTIPLICITY));
     }
 
     private String errorQR(String QR) {
@@ -204,20 +195,15 @@ public class ScanActivity extends BaseActivity {
 
 
     public Boolean checkScan() {
-        return sqanBase.query(ScanDatabase.DATABASE_NAME, null, null, null, null, null, null).getCount() > 0;
+        return sqanBase.query(Database.DATABASE_SCAN, null, null, null, null, null, null).getCount() > 0;
     }
 
     private void clearbase() {
-        sqanBase.delete(ScanDatabase.DATABASE_NAME, null, null);
+        sqanBase.delete(Database.DATABASE_NAME, null, null);
     }
 
 
     private void checkFull() {
-        if(data[0] != null) {
-            int goodsname = cursor.getColumnIndex(ReadDatabase.GOODS_NAME);
-            String description = cursor.getString(goodsname);
-            this.description.setText(description);
-        }
         if (data[0] != null && data[1] != null && data[2] != null && data[3] != null && data[4] != null && data[5] != null && data[6] != null) {
             addBottleInDB();
             data[0] = null;
@@ -288,8 +274,8 @@ public class ScanActivity extends BaseActivity {
         }
     }
 
-    private String qrDestroy(String qr) {
-        return qr.substring(0, 2) + " " + qr.substring(4, 14);
+    private void qrDestroy(String qr) {
+        qrCode.setText(qr.substring(4, 7) + " " + qr.substring(7, 15));
     }
 
     @Override

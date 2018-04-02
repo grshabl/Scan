@@ -25,7 +25,7 @@ public class CSVReadingHelper {
 
 
 
-    public CSVReadingHelper(String fileLocation, ReadDatabase readDatabase) {
+    public CSVReadingHelper(String fileLocation, Database readDatabase) {
         readBase = readDatabase.getWritableDatabase();
         contentValues = new ContentValues();
         fileString = new String[9];
@@ -54,19 +54,19 @@ public class CSVReadingHelper {
 
 
     public void addReadData(String plodnum, String day, String plodline, String goodsLine, String ean13, String goodname, String markserial, String start, String end, String multiplicity) {
-        contentValues.put(ReadDatabase.PLOD, plodnum);
-        contentValues.put(ReadDatabase.PLOD_DAY, day);
-        contentValues.put(ReadDatabase.PLOD_LINE, plodline);
-        contentValues.put(ReadDatabase.GOODS_LINE, goodsLine);
-        contentValues.put(ReadDatabase.BOX_EAN, ean13);
-        contentValues.put(ReadDatabase.GOODS_NAME, goodname);
-        contentValues.put(ReadDatabase.MARK_SERIAL, markserial);
-        contentValues.put(ReadDatabase.STARTNUM, start);
-        contentValues.put(ReadDatabase.ENDNUM, end);
-        contentValues.put(ReadDatabase.MULTIPLICITY, multiplicity);
+        contentValues.put(Database.PLOD, plodnum);
+        contentValues.put(Database.PLOD_DAY, day);
+        contentValues.put(Database.PLOD_LINE, plodline);
+        contentValues.put(Database.GOODS_LINE, goodsLine);
+        contentValues.put(Database.BOX_EAN, ean13);
+        contentValues.put(Database.GOODS_NAME, goodname);
+        contentValues.put(Database.SERIAL, markserial);
+        contentValues.put(Database.STARTNUM, start);
+        contentValues.put(Database.ENDNUM, end);
+        contentValues.put(Database.MULTIPLICITY, multiplicity);
 
 
-        readBase.insert(ReadDatabase.DATABASE_NAME, null, contentValues);
+        readBase.insert(Database.DATABASE_READ, null, contentValues);
         contentValues.clear();
 
     }

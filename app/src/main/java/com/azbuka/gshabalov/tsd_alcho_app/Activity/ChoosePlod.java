@@ -2,7 +2,6 @@ package com.azbuka.gshabalov.tsd_alcho_app.Activity;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,7 +20,6 @@ import com.azbuka.gshabalov.tsd_alcho_app.BaseActivity;
 import com.azbuka.gshabalov.tsd_alcho_app.R;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.CSVReadingHelper;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Database;
-import com.azbuka.gshabalov.tsd_alcho_app.utils.ReadDatabase;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,7 +27,7 @@ import java.util.ArrayList;
 public class ChoosePlod extends BaseActivity {
     File current;
     SharedPreferences sPref;
-    ReadDatabase readDatabase;
+    Database readDatabase;
     SQLiteDatabase readBase;
     Spinner spinner;
     CSVReadingHelper csvReadingHelper;
@@ -42,7 +40,6 @@ public class ChoosePlod extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_plod);
-        ReadDatabase readDatabase = new ReadDatabase(this);
         ArrayList<String> plodNames = new ArrayList<>();
         sPref = getSharedPreferences("DataShared", MODE_PRIVATE);
 
@@ -67,12 +64,11 @@ public class ChoosePlod extends BaseActivity {
         }
 
         csvReadingHelper = new CSVReadingHelper(current.toString(), readDatabase);
-
-        readDatabase = new ReadDatabase(this);
+        readDatabase = new Database(this);
         readBase = readDatabase.getWritableDatabase();
-        Cursor cursor = readBase.query(true, ReadDatabase.DATABASE_NAME, new String[]{ReadDatabase.PLOD}, null, null, ReadDatabase.PLOD, null, null, null);
+        Cursor cursor = readBase.query(true, Database.DATABASE_READ, new String[]{Database.PLOD}, null, null, Database.PLOD, null, null, null);
         if (cursor.moveToFirst()) {
-            int index = cursor.getColumnIndex(ReadDatabase.PLOD);
+            int index = cursor.getColumnIndex(Database.PLOD);
             do {
                 plodNames.add(cursor.getString(index));
             } while (cursor.moveToNext());
