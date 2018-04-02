@@ -298,7 +298,7 @@ public class ScanActivity extends BaseActivity {
                 values = new ContentValues();
                 values.put(Database.PLOD,c.getString(1));
                 values.put(Database.PLOD_LINE,c.getString(2));
-                values.put(Database.GOODS_LINE,c.getString(3));
+                values.put(Database.GOODS_CODE,c.getString(3));
                 values.put(Database.QR,c.getString(4));
                 values.put(Database.PDF417,c.getString(5));
                 values.put(Database.MARK_BAD,c.getString(6));
