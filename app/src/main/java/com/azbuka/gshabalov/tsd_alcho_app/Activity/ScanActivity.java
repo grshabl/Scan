@@ -290,6 +290,26 @@ public class ScanActivity extends BaseActivity {
         qrCode.setText(qr.substring(4, 7) + " " + qr.substring(7, 15));
     }
 
+    private void twoInOne(){
+        Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_SCAN,null);
+        ContentValues values;
+        if(c.moveToFirst()){
+            do{
+                values = new ContentValues();
+                values.put(Database.PLOD,c.getString(1));
+                values.put(Database.PLOD_LINE,c.getString(2));
+                values.put(Database.GOODS_LINE,c.getString(3));
+                values.put(Database.QR,c.getString(4));
+                values.put(Database.PDF417,c.getString(5));
+                values.put(Database.MARK_BAD,c.getString(6));
+                values.put(Database.BOX_EAN,c.getString(7));
+                values.put(Database.MULTIPLICITY,c.getString(8));
+                readBase.insert(Database.DATABASE_WRITE,null,values);
+            }while (c.moveToNext());
+        }
+        readBase.delete(Database.DATABASE_SCAN,"1",null);
+    }
+
     @Override
     public void onBackPressed() {
         if (checkScan()) {
