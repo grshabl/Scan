@@ -23,12 +23,9 @@
         </activity>
         <activity android:name=".Activity.ScanActivity" />
         <activity android:name=".Activity.ChoosePlod" />
-        <activity android:name=".Activity.Settings"/>
-        <activity android:name=".Activity.ViewActivity"/>
-        <activity android:name=".Activity.ScanBoxViewActivity"></activity>
-
-
-
+        <activity android:name=".Activity.Settings" />
+        <activity android:name=".Activity.ViewActivity" />
+        <activity android:name=".Activity.ScanBoxViewActivity" />
 
         <receiver
             android:name=".Activity.ScanActivity$ScanResultReceiver"
@@ -40,6 +37,7 @@
             </intent-filter>
         </receiver>
 
+        <activity android:name=".Activity.BoxViewActivity"></activity>
     </application>
 
 </manifest>
