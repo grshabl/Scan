@@ -40,8 +40,6 @@ public class ScanActivity extends BaseActivity {
     private TextView description, qrCode, pdf417Code, boxCount;
     private EditText code;
     Database database;
-    SQLiteDatabase sqanBase;
-    SQLiteDatabase prodBase;
     SQLiteDatabase readBase;
     ContentValues contentValues;
     Cursor cursor;
@@ -105,12 +103,17 @@ public class ScanActivity extends BaseActivity {
         if (cursor.moveToFirst()) {
             int start = cursor.getColumnIndex(Database.STARTNUM);
             int end = cursor.getColumnIndex(Database.ENDNUM);
+            int plodLine = cursor.getColumnIndex(Database.PLOD_LINE);
+            int goodscode = cursor.getColumnIndex(Database.GOODS_CODE);
             do {
                 if (cursor.getString(start).hashCode() < qr.hashCode() && cursor.getString(end).hashCode() > qr.hashCode()) {
-                    SharedPreferences.Editor ed = sPref.edit();
-                    ed.putString(Database.STARTNUM, cursor.getString(start));
-                    ed.putString(Database.ENDNUM, cursor.getString(end));
-                    ed.apply();
+
+                      this.plodLine = cursor.getString(plodLine);
+
+//                    SharedPreferences.Editor ed = sPref.edit();
+//                    ed.putString(Database.STARTNUM, cursor.getString(start));
+//                    ed.putString(Database.ENDNUM, cursor.getString(end));
+//                    ed.apply();
                     include = true;
                 }
             } while (cursor.moveToNext());
@@ -132,7 +135,7 @@ public class ScanActivity extends BaseActivity {
         contentValues.put(Database.BOX_EAN, boxean);
         contentValues.put(Database.MULTIPLICITY, multiplicity);
 
-        sqanBase.insert(Database.DATABASE_SCAN, null, contentValues);
+        readBase.insert(Database.DATABASE_SCAN, null, contentValues);
         contentValues.clear();
 
     }
@@ -199,7 +202,7 @@ public class ScanActivity extends BaseActivity {
     }
 
     private void setMultiplicityError() {
-        sqanBase.execSQL(String.format("Update %s set %s = '1'", Database.DATABASE_SCAN, Database.MULTIPLICITY));
+        readBase.execSQL(String.format("Update %s set %s = '1'", Database.DATABASE_SCAN, Database.MULTIPLICITY));
     }
 
     private String errorQR(String QR) {
@@ -212,7 +215,7 @@ public class ScanActivity extends BaseActivity {
     }
 
     private void clearbase() {
-        sqanBase.delete(Database.DATABASE_NAME, null, null);
+        readBase.delete(Database.DATABASE_SCAN, null, null);
     }
 
 

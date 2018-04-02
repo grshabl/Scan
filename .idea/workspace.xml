@@ -10,18 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6113090f-8a5a-4caf-a822-515c12105420" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/fileHashes/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/4.1/fileHashes/fileHashes.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/fileHashes/fileHashes.lock" afterPath="$PROJECT_DIR$/.gradle/4.1/fileHashes/fileHashes.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/javaCompile/classAnalysis.bin" afterPath="$PROJECT_DIR$/.gradle/4.1/javaCompile/classAnalysis.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/javaCompile/javaCompile.lock" afterPath="$PROJECT_DIR$/.gradle/4.1/javaCompile/javaCompile.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/javaCompile/taskHistory.bin" afterPath="$PROJECT_DIR$/.gradle/4.1/javaCompile/taskHistory.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/taskHistory/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/4.1/taskHistory/fileSnapshots.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.bin" afterPath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.lock" afterPath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ChoosePlod.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ChoosePlod.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ScanActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ScanActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/utils/CSVReadingHelper.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/utils/CSVReadingHelper.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/utils/Database.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/utils/Database.java" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -39,24 +28,27 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ScanActivity.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ScanActivity.java">
+      <file leaf-file-name="Database.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/utils/Database.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3099">
-              <caret line="254" column="5" lean-forward="false" selection-start-line="254" selection-start-column="5" selection-end-line="254" selection-end-column="5" />
-              <folding />
+            <state relative-caret-position="627">
+              <caret line="57" column="117" lean-forward="false" selection-start-line="57" selection-start-column="117" selection-end-line="57" selection-end-column="117" />
+              <folding>
+                <element signature="e#1366#1367#0" expanded="true" />
+                <element signature="e#1430#1431#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Database.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/utils/Database.java">
+      <file leaf-file-name="ScanActivity.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ScanActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="12" column="48" lean-forward="false" selection-start-line="12" selection-start-column="48" selection-end-line="12" selection-end-column="48" />
+            <state relative-caret-position="495">
+              <caret line="106" column="25" lean-forward="false" selection-start-line="106" selection-start-column="25" selection-end-line="106" selection-end-column="25" />
               <folding>
-                <element signature="e#1423#1424#0" expanded="true" />
-                <element signature="e#1487#1488#0" expanded="true" />
+                <element signature="e#7638#7639#0" expanded="true" />
+                <element signature="e#7705#7706#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -65,7 +57,7 @@
       <file leaf-file-name="ChoosePlod.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ChoosePlod.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-645">
+            <state relative-caret-position="-350">
               <caret line="65" column="42" lean-forward="false" selection-start-line="65" selection-start-column="42" selection-end-line="65" selection-end-column="42" />
               <folding />
             </state>
@@ -102,8 +94,8 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>qrde</find>
-      <find>readDatabase</find>
       <find>des</find>
+      <find>readDatabase</find>
       <find>on</find>
     </findStrings>
   </component>
@@ -1843,9 +1835,9 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_scan.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/utils/Database.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/utils/CSVReadingHelper.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ChoosePlod.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/utils/Database.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ScanActivity.java" />
       </list>
     </option>
@@ -2086,7 +2078,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1522632868697" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1522634240916" />
       </method>
     </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests">
@@ -2134,7 +2126,7 @@
       </Profilers>
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1522632868697" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1522634240917" />
       </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -2317,7 +2309,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1522632868698" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1522634240917" />
       </method>
     </configuration>
     <list size="1">
@@ -2400,25 +2392,25 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ScanActivity.java</url>
-          <line>219</line>
+          <line>222</line>
           <properties />
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ScanActivity.java</url>
-          <line>286</line>
+          <line>289</line>
           <properties />
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ScanActivity.java</url>
-          <line>210</line>
+          <line>213</line>
           <properties />
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ScanActivity.java</url>
-          <line>209</line>
+          <line>212</line>
           <properties class="com.azbuka.gshabalov.tsd_alcho_app.Activity.ScanActivity" method="checkScan">
             <option name="EMULATED" value="true" />
           </properties>
@@ -2454,25 +2446,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ChoosePlod.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-645">
-          <caret line="65" column="42" lean-forward="false" selection-start-line="65" selection-start-column="42" selection-end-line="65" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/utils/Database.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="12" column="48" lean-forward="false" selection-start-line="12" selection-start-column="48" selection-end-line="12" selection-end-column="48" />
-          <folding>
-            <element signature="e#1423#1424#0" expanded="true" />
-            <element signature="e#1487#1488#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_scan.xml">
       <provider editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -2486,11 +2459,33 @@
         <state />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ChoosePlod.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-350">
+          <caret line="65" column="42" lean-forward="false" selection-start-line="65" selection-start-column="42" selection-end-line="65" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/utils/Database.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="627">
+          <caret line="57" column="117" lean-forward="false" selection-start-line="57" selection-start-column="117" selection-end-line="57" selection-end-column="117" />
+          <folding>
+            <element signature="e#1366#1367#0" expanded="true" />
+            <element signature="e#1430#1431#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ScanActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3099">
-          <caret line="254" column="5" lean-forward="false" selection-start-line="254" selection-start-column="5" selection-end-line="254" selection-end-column="5" />
-          <folding />
+        <state relative-caret-position="495">
+          <caret line="106" column="25" lean-forward="false" selection-start-line="106" selection-start-column="25" selection-end-line="106" selection-end-column="25" />
+          <folding>
+            <element signature="e#7638#7639#0" expanded="true" />
+            <element signature="e#7705#7706#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

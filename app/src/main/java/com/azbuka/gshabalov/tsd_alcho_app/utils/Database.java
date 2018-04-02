@@ -21,7 +21,6 @@ public class Database extends SQLiteOpenHelper {
     public static final String PLOD = "plod";
     public static final String PLOD_DAY = "plodday";
     public static final String PLOD_LINE = "plodline";
-    public static final String GOODS_LINE = "goodsLINE";
     public static final String QR = "qr";
     public static final String PDF417 = "pdf417";
     public static final String MARK_BAD = "markbad";
@@ -44,7 +43,7 @@ public class Database extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         db.execSQL("create table " + DATABASE_WRITE + "(" + BOTTLE_ID
-                + " integer primary key," + PLOD + " text," + PLOD_LINE + " text," + GOODS_LINE + " text," + QR +" text,"
+                + " integer primary key," + PLOD + " text," + PLOD_LINE + " text," + GOODS_CODE + " text," + QR +" text,"
                 + PDF417 + " text," + MARK_BAD + " text,"
                 + BOX_EAN + " text," + MULTIPLICITY + " text" + ")");
 
@@ -56,7 +55,7 @@ public class Database extends SQLiteOpenHelper {
 
 
         db.execSQL("create table " + DATABASE_READ + "(" + LINE
-                + " integer primary key," + PLOD + " text," + PLOD_DAY + " text," + PLOD_LINE + " text," + GOODS_LINE + " text," + BOX_EAN + " text," + GOODS_NAME +" text,"  +
+                + " integer primary key," + PLOD + " text," + PLOD_DAY + " text," + PLOD_LINE + " text," + GOODS_CODE + " text," + BOX_EAN + " text," + GOODS_NAME +" text,"  +
                 SERIAL + " text," + STARTNUM + " text," + ENDNUM + " text," + MULTIPLICITY + " text" + ")");
 
     }
