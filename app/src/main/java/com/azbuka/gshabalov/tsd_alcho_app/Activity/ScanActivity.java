@@ -184,7 +184,6 @@ public class ScanActivity extends BaseActivity {
             if (lpb(scanStr)) {
                 if (data[1] == null && data[2] == null){
                     lpb = scanStr;
-
                     twoInOne(lpb);
                 } else {
                     Alert("Сначала закончите сканирование бутылки");
@@ -281,14 +280,7 @@ public class ScanActivity extends BaseActivity {
     }
 
     private boolean qrnew(String qr) {
-        Cursor a = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE,null);
         Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_SCAN,null);
-        if(a.moveToFirst()){
-            do {
-                if(a.getString(4).equals(qr))
-                    return true;
-            }while (a.moveToNext());
-        }
         if(c.moveToFirst()){
             do {
                 if(c.getString(4).equals(qr))
@@ -296,7 +288,6 @@ public class ScanActivity extends BaseActivity {
             }while (c.moveToNext());
         }
         return false;
-        //return readBase.query(Database.DATABASE_SCAN, new String[]{Database.QR}, Database.QR + " = '" + qr + "'", null, null, null, null).getCount() != 0;
     }
 
     public void Alert(String msg) {
