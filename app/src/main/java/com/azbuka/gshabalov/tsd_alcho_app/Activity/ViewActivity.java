@@ -302,6 +302,8 @@ public class ViewActivity extends Activity {
         writeCSVHelper.writeLine(strings);
         writeCSVHelper.close();
         db.delete(Database.DATABASE_WRITE,"1",null);
+        initializeData();
+        adapter.notifyDataSetChanged();
     }
     public static void initializeData() {
         ArrayList<Items> lbp = new ArrayList<>();
