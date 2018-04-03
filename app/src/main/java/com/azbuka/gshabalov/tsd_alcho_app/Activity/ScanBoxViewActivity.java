@@ -37,7 +37,7 @@ public class ScanBoxViewActivity extends Activity {
         Items item;
         if(c.moveToFirst()){
             do{
-                item = new Items(c.getString(4).substring(4,17),
+                item = new Items(c.getString(4).substring(4,15),
                         c.getString(5).equals("0")?"Не считан":"Считан");
                 list.add(item);
             }while (c.moveToNext());
