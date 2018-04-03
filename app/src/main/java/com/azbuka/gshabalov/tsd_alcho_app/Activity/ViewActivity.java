@@ -28,6 +28,7 @@ import com.azbuka.gshabalov.tsd_alcho_app.R;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.BoxesAdapterView;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Database;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Items;
+import com.azbuka.gshabalov.tsd_alcho_app.utils.WriteCSVHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -191,6 +192,13 @@ public class ViewActivity extends Activity {
 
             }
         });
+        Button export = findViewById(R.id.importBut);
+        export.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                outData(readBase);
+            }
+        });
         initializeAdapter();
 
 
@@ -251,7 +259,36 @@ public class ViewActivity extends Activity {
             iScanner.aDecodeSetResultType(ScannerService.ResultType.DCD_RESULT_USERMSG);
         }
     }
+    private void outData(SQLiteDatabase db){
+        WriteCSVHelper writeCSVHelper;
 
+        String foldeName = "/storage/sdcard0/AvExchange/Out";
+        //Имя файла нужно указывать с расширением если оно нужно
+        String fileName = "Out";
+
+        String[] string = new String[8];
+        String[] strings = {"", "", ""};
+
+        writeCSVHelper = new WriteCSVHelper(foldeName, fileName, WriteCSVHelper.SEMICOLON_SEPARATOR);
+        Cursor c = db.rawQuery("SELECT * FROM "+ Database.DATABASE_WRITE,null);
+        if(c.moveToFirst()) {
+            do {
+                string[0] = c.getString(1);
+                string[1] = c.getString(2);
+                string[2] = c.getString(3);
+                string[3] = c.getString(4);
+                string[4] = c.getString(5);
+                string[5] = c.getString(6);
+                string[6] = c.getString(8);
+                string[7] = c.getString(9);
+                writeCSVHelper.writeLine(string);
+            }while (c.moveToNext());
+
+        }
+        writeCSVHelper.writeLine(strings);
+        writeCSVHelper.close();
+        db.delete(Database.DATABASE_WRITE,"1",null);
+    }
     public static void initializeData() {
         ArrayList<Items> lbp = new ArrayList<>();
         Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE,null);
