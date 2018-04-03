@@ -41,7 +41,8 @@ public class ScanActivity extends BaseActivity {
     private TextView description, qrCode, pdf417Code, boxCount;
     private EditText code;
     private Button entercode;
-    private boolean qrk = false;
+    private boolean multic = false;
+    private int multis = -1;
     Database database;
     SQLiteDatabase readBase;
     ContentValues contentValues;
@@ -148,7 +149,12 @@ public class ScanActivity extends BaseActivity {
                     this.plodLine = cursor.getString(plodline);
                     this.goodsCode = cursor.getString(goodscode);
                     this.multiplicity = cursor.getString(multiplicity);
-                    qrk = true;
+                    String[] ml = this.multiplicity.split("~");
+                    for (String mul:
+                            ml) {
+                        if(mul!=null)
+                            multis = Integer.parseInt(mul);
+                    }
                     return true;
                 }
             } while (cursor.moveToNext());
@@ -222,8 +228,8 @@ public class ScanActivity extends BaseActivity {
                             } else if (errorQR(scanStr).equals(data[1]) || qrnew(errorQR(scanStr))) {
                                 Alert("QR уже был считан");
                             } else {
-                                if (data[0] != null &&
-                                        Integer.parseInt(multi[multi.length-1])>=Integer.parseInt(boxCount.getText().toString())
+                                if (data[0] != null && multis!=-1 &&
+                                        multis>=Integer.parseInt(boxCount.getText().toString())
                                         && Integer.parseInt(boxCount.getText().toString())>0) {
                                     Alert("Просканировано максимальное количество бутылок");
                                     break;
@@ -243,8 +249,8 @@ public class ScanActivity extends BaseActivity {
                             } else if (scanStr.equals(data[1]) || qrnew(scanStr)) {
                                 Alert("QR уже был считан");
                             } else {
-                                if (data[0] != null &&
-                                        Integer.parseInt(multi[multi.length-1])>=Integer.parseInt(boxCount.getText().toString())
+                                if (data[0] != null && multis!=-1 &&
+                                        multis>=Integer.parseInt(boxCount.getText().toString())
                                         && Integer.parseInt(boxCount.getText().toString())>0) {
                                     Alert("Просканировано максимальное количество бутылок");
                                     break;
@@ -260,8 +266,8 @@ public class ScanActivity extends BaseActivity {
 
                         case 68:
                             if (data[0] != null) {
-                                if (data[0] != null &&
-                                        Integer.parseInt(multi[multi.length-1])>=Integer.parseInt(boxCount.getText().toString())
+                                if (data[0] != null && multis!=-1 &&
+                                        multis>=Integer.parseInt(boxCount.getText().toString())
                                         && Integer.parseInt(boxCount.getText().toString())>0) {
                                     Alert("Просканировано максимальное количество бутылок");
                                     break;
@@ -316,8 +322,11 @@ public class ScanActivity extends BaseActivity {
         Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_SCAN,null);
         if(c.moveToFirst()){
             do {
-                if(c.getString(4).equals(qr))
+                if(c.getString(4).equals(qr)) {
+
                     return true;
+
+                }
             }while (c.moveToNext());
         }
         return false;
@@ -373,9 +382,8 @@ public class ScanActivity extends BaseActivity {
                 break;
 
             case R.id.cantPdf:
-                String[] multi = multiplicity.split("~");
-                if (data[0] != null &&
-                        Integer.parseInt(multi[multi.length-1])>=Integer.parseInt(boxCount.getText().toString())
+                if (data[0] != null && multis!=-1 &&
+                        multis>=Integer.parseInt(boxCount.getText().toString())
                         && Integer.parseInt(boxCount.getText().toString())>0) {
                     Alert("Просканировано максимальное количество бутылок");
                     break;
