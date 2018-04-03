@@ -204,10 +204,7 @@ public class ScanActivity extends BaseActivity {
             } else {
                 if (scanenable) {
                     String[] multi = multiplicity.split("~");
-                    if (data[0] != null &&
-                            Integer.parseInt(multi[multi.length-1])>=Integer.parseInt(boxCount.getText().toString())) {
-                        Alert("Просканировано максимальное количество бутылок");
-                    }
+
                     switch (scanStr.length()) {
                         case 13:
                             if (checkScan() && data[0] != null) {
@@ -225,6 +222,11 @@ public class ScanActivity extends BaseActivity {
                             } else if (errorQR(scanStr).equals(data[1]) || qrnew(errorQR(scanStr))) {
                                 Alert("QR уже был считан");
                             } else {
+                                if (data[0] != null &&
+                                        Integer.parseInt(multi[multi.length-1])>=Integer.parseInt(boxCount.getText().toString())) {
+                                    Alert("Просканировано максимальное количество бутылок");
+                                    break;
+                                }
                                 if (checkQR(scanStr.substring(3, 11))) {
                                     data[1] = errorQR(scanStr); //QR scan
                                     qrDestroy(errorQR(scanStr));
@@ -240,6 +242,11 @@ public class ScanActivity extends BaseActivity {
                             } else if (scanStr.equals(data[1]) || qrnew(scanStr)) {
                                 Alert("QR уже был считан");
                             } else {
+                                if (data[0] != null &&
+                                        Integer.parseInt(multi[multi.length-1])>=Integer.parseInt(boxCount.getText().toString())) {
+                                    Alert("Просканировано максимальное количество бутылок");
+                                    break;
+                                }
                                 if (checkQR(scanStr.substring(7, 15))) {
                                     data[1] = scanStr; //QR scan
                                     qrDestroy(scanStr);
@@ -251,6 +258,11 @@ public class ScanActivity extends BaseActivity {
 
                         case 68:
                             if (data[0] != null) {
+                                if (data[0] != null &&
+                                        Integer.parseInt(multi[multi.length-1])>=Integer.parseInt(boxCount.getText().toString())) {
+                                    Alert("Просканировано максимальное количество бутылок");
+                                    break;
+                                }
                                 data[2] = scanStr; //PDF
                                 pdf417Code.setText("считан");
                             } else {
@@ -354,6 +366,12 @@ public class ScanActivity extends BaseActivity {
                 break;
 
             case R.id.cantPdf:
+                String[] multi = multiplicity.split("~");
+                if (data[0] != null &&
+                        Integer.parseInt(multi[multi.length-1])>=Integer.parseInt(boxCount.getText().toString())) {
+                    Alert("Просканировано максимальное количество бутылок");
+                    break;
+                }
                 data[2] = "0";
                 markbad = "1";
                 pdf417Code.setText("Не считан");
