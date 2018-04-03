@@ -186,7 +186,7 @@ public class ScanActivity extends BaseActivity {
 
     private boolean lpb(String str){
         String template = sPref.getString(Database.GOODS_LPB, "LPB-??????????");
-        String startwth = template.split("'?'")[0];
+        String startwth = template.split("-")[0];
         return (str.startsWith(startwth) && str.length() == template.length());
     }
 

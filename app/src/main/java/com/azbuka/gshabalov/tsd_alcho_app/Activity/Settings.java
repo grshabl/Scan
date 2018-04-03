@@ -30,6 +30,7 @@ public class Settings extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         ArrayList<String> plodNames = new ArrayList<>();
+        spinner = findViewById(R.id.spinirishe);
 
         template = findViewById(R.id.edittextishe);
         readDatabase = new Database(this);
