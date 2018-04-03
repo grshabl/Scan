@@ -364,10 +364,12 @@ public class ScanActivity extends BaseActivity {
         switch (v.getId()) {
 
             case R.id.erase:
+                data[0] = null;
                 data[1] = null;
                 data[2] = null;
                 qrCode.setText("");
                 pdf417Code.setText("");
+                description.setText("");
                 break;
 
             case R.id.cantPdf:
@@ -398,6 +400,11 @@ public class ScanActivity extends BaseActivity {
     }
 
     private void twoInOne(String lpb) {
+        data[1] = null;
+        data[2] = null;
+        qrCode.setText("");
+        pdf417Code.setText("");
+
         Cursor c = readBase.rawQuery("SELECT * FROM " + Database.DATABASE_SCAN, null);
         ContentValues values;
         if (c.moveToFirst()) {
