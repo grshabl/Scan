@@ -25,6 +25,8 @@ import com.azbuka.gshabalov.tsd_alcho_app.BaseActivity;
 import com.azbuka.gshabalov.tsd_alcho_app.R;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Database;
 
+import java.util.ArrayList;
+
 import device.scanner.DecodeResult;
 import device.scanner.IScannerService;
 import device.scanner.ScannerService;
@@ -39,6 +41,7 @@ public class ScanActivity extends BaseActivity {
     private TextView description, qrCode, pdf417Code, boxCount;
     private EditText code;
     private Button entercode;
+    private boolean qrk = false;
     Database database;
     SQLiteDatabase readBase;
     ContentValues contentValues;
@@ -134,7 +137,7 @@ public class ScanActivity extends BaseActivity {
 
     private boolean checkQR(String qr) {
         boolean include = false;
-        if (cursor.moveToFirst()) {
+        if (cursor.moveToFirst() && !qrk) {
             int start = cursor.getColumnIndex(Database.STARTNUM);
             int end = cursor.getColumnIndex(Database.ENDNUM);
             int plodline = cursor.getColumnIndex(Database.PLOD_LINE);
@@ -145,9 +148,24 @@ public class ScanActivity extends BaseActivity {
                     this.plodLine = cursor.getString(plodline);
                     this.goodsCode = cursor.getString(goodscode);
                     this.multiplicity = cursor.getString(multiplicity);
-                    include = true;
+                    qrk = true;
+                    return true;
                 }
             } while (cursor.moveToNext());
+        }
+        if(qrk) {
+            int start = cursor.getColumnIndex(Database.STARTNUM);
+            int end = cursor.getColumnIndex(Database.ENDNUM);
+            int plodline = cursor.getColumnIndex(Database.PLOD_LINE);
+            int goodscode = cursor.getColumnIndex(Database.GOODS_CODE);
+            int multiplicity = cursor.getColumnIndex(Database.MULTIPLICITY);
+            if (cursor.getString(start).hashCode() <= qr.hashCode() && cursor.getString(end).hashCode() >= qr.hashCode()) {
+                this.plodLine = cursor.getString(plodline);
+                this.goodsCode = cursor.getString(goodscode);
+                this.multiplicity = cursor.getString(multiplicity);
+                qrk = true;
+                return true;
+            }
         }
         return include;
     }
@@ -182,7 +200,16 @@ public class ScanActivity extends BaseActivity {
     public class BarScan {
         private void chooseType(String scanStr) {
             if (lpb(scanStr)) {
-                if (data[1] == null && data[2] == null){
+                String[] multi = multiplicity.split("~");
+                boolean flag = false;
+                for(String mult: multi){
+                    if(boxcount()==Integer.parseInt(mult)){
+                        flag = true;
+                    }
+                }
+                if(!flag)
+                    chooseAlert();
+                else if (data[1] == null && data[2] == null){
                     lpb = scanStr;
 
                     twoInOne(lpb);
@@ -191,6 +218,11 @@ public class ScanActivity extends BaseActivity {
                 }
             } else {
                 if (scanenable) {
+                    String[] multi = multiplicity.split("~");
+                    if (checkScan() && data[0] != null && multi!=null &&
+                            Integer.parseInt(multi[multi.length-1])>=boxcount()) {
+                        Alert("Просканировано максимальное количество бутылок");
+                    }
                     switch (scanStr.length()) {
                         case 13:
                             if (checkScan() && data[0] != null) {
@@ -317,6 +349,7 @@ public class ScanActivity extends BaseActivity {
     }
 
     private void chooseAlert() {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);
         builder.setTitle("Внимание!").setMessage("Количество просканированных бутылок (" + boxCount.getText().toString() + ") не соответсвует кратности (" + multiplicity.replace("~", ".") + ") .Продолжить? ").setCancelable(false).setNegativeButton("Закрыть", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
