@@ -75,7 +75,7 @@ public class BoxViewActivity extends Activity {
                     if (ViewActivity.boxId.equals(barCode)) {
 
 
-                        readBase.delete(Database.DATABASE_WRITE, "LPB = " + barCode, null);
+                        readBase.delete(Database.DATABASE_WRITE, Database.GOODS_LPB+" = " + barCode, null);
                         rv.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                         ViewActivity.initializeData();
@@ -159,7 +159,7 @@ public class BoxViewActivity extends Activity {
                                 if (ViewActivity.boxId.equals(userInput.getText())) {
 
 
-                                    readBase.delete(Database.DATABASE_WRITE, "LPB = " + userInput.getText(), null);
+                                    readBase.delete(Database.DATABASE_WRITE, Database.GOODS_LPB+" = " + userInput.getText(), null);
                                     rv.setAdapter(adapter);
                                     adapter.notifyDataSetChanged();
                                     ViewActivity.initializeData();
@@ -199,7 +199,7 @@ public class BoxViewActivity extends Activity {
                                         if (ViewActivity.boxId.equals(userInput.getText())) {
 
 
-                                            readBase.delete(Database.DATABASE_WRITE, "LPB = " + userInput.getText(), null);
+                                            readBase.delete(Database.DATABASE_WRITE, Database.GOODS_LPB+" = " + userInput.getText(), null);
                                             rv.setAdapter(adapter);
                                             adapter.notifyDataSetChanged();
                                             ViewActivity.initializeData();

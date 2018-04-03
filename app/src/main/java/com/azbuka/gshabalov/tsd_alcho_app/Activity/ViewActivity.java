@@ -68,17 +68,24 @@ public class ViewActivity extends Activity {
                     mDecodeResult.recycle();
                     iScanner.aDecodeGetResult(mDecodeResult);
                     barcode = mDecodeResult.toString();
-                    Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE+" WHERE "+Database.GOODS_LPB+" = "+barcode,null);
+                    boolean flag = false;
+                    Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE,null);
                     if(c.moveToFirst()) {
-                        Intent intent1 = new Intent(context, BoxViewActivity.class);
-                        intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                        boxId = barcode;
-                        intent1.putExtra("boxId", barcode);
-                        context.startActivity(intent1);
+                        do {
+                            if(c.getString(8).equals(barcode)) {
+                                Intent intent1 = new Intent(context, BoxViewActivity.class);
+                                intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                                boxId = barcode;
+                                intent1.putExtra("boxId", barcode);
+                                context.startActivity(intent1);
+                                flag = true;
+                            }
+                        }while (c.moveToNext());
 
 
-                    } else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(ViewActivity.context);
+                    }
+                    if(!flag){
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         builder.setTitle("Ошибка!")
                                 .setMessage("Данной коробки нет в базе данных")
                                 .setCancelable(false)
@@ -149,15 +156,22 @@ public class ViewActivity extends Activity {
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         //Вводим текст и отображаем в строке ввода на основном экране:
-                                        Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE+" WHERE "+
-                                                Database.GOODS_LPB+" = "+userInput.getText(),null);
-                                        if(c.moveToFirst()){
-                                            Intent intent = new Intent(context, BoxViewActivity.class);
-                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                                            intent.putExtra("boxId",userInput.getText());
-                                            startActivity(intent);
+                                        boolean flag = false;
+                                        Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE,null);
+                                        if(c.moveToFirst()) {
+                                            do {
+                                                if(c.getString(8).equals(userInput.getText().toString())) {
+                                                    Intent intent1 = new Intent(context, BoxViewActivity.class);
+                                                    intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                                                    boxId = userInput.getText().toString();
+                                                    intent1.putExtra("boxId", userInput.getText().toString());
+                                                    context.startActivity(intent1);
+                                                    flag = true;
+                                                }
+                                            }while (c.moveToNext());
 
-                                        } else {
+                                        }
+                                         if(!flag){
 
                                             AlertDialog.Builder builder = new AlertDialog.Builder(context);
                                             builder.setTitle("Ошибка!")
