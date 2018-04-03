@@ -194,7 +194,7 @@ public class ScanActivity extends BaseActivity {
                     }
                 }
                 if(!flag)
-                    chooseAlert();
+                    chooseAlert(scanStr);
                 else if (data[1] == null && data[2] == null){
                     lpb = scanStr;
                     twoInOne(lpb);
@@ -337,7 +337,7 @@ public class ScanActivity extends BaseActivity {
         alert.show();
     }
 
-    private void chooseAlert() {
+    private void chooseAlert(final String scanStr) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);
         builder.setTitle("Внимание!").setMessage("Количество просканированных бутылок (" + boxCount.getText().toString() + ") не соответсвует кратности (" + multiplicity.replace("~", ".") + ") .Продолжить? ").setCancelable(false).setNegativeButton("Закрыть", new DialogInterface.OnClickListener() {
@@ -347,6 +347,8 @@ public class ScanActivity extends BaseActivity {
         }).setPositiveButton("Ок", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int arg1) {
                 setMultiplicityError();
+                lpb = scanStr;
+                twoInOne(lpb);
                 twoInOne(lpb);
             }
         });
