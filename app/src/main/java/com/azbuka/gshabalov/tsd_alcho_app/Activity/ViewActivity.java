@@ -303,6 +303,7 @@ public class ViewActivity extends Activity {
         writeCSVHelper.close();
         db.delete(Database.DATABASE_WRITE,"1",null);
         initializeData();
+        initializeAdapter();
         adapter.notifyDataSetChanged();
     }
     public static void initializeData() {
