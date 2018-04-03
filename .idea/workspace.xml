@@ -19,8 +19,7 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.bin" afterPath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.lock" afterPath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ChoosePlod.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ChoosePlod.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/utils/BoxesAdapterView.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/utils/BoxesAdapterView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ScanActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ScanActivity.java" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -54,6 +53,20 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="ScanActivity.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ScanActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1207">
+              <caret line="354" column="37" lean-forward="false" selection-start-line="354" selection-start-column="37" selection-end-line="354" selection-end-column="37" />
+              <folding>
+                <element signature="e#10854#10855#0" expanded="true" />
+                <element signature="e#10921#10922#0" expanded="true" />
+                <marker date="1522720187526" expanded="true" signature="7680:10410" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="CSVReadingHelper.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/utils/CSVReadingHelper.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -68,10 +81,11 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ViewActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="2742">
-              <caret line="243" column="34" lean-forward="false" selection-start-line="243" selection-start-column="34" selection-end-line="243" selection-end-column="34" />
+              <caret line="257" column="34" lean-forward="false" selection-start-line="257" selection-start-column="34" selection-end-line="257" selection-end-column="34" />
               <folding>
-                <marker date="1522718756852" expanded="true" signature="11456:12344" ph="{...}" />
-                <marker date="1522718756852" expanded="true" signature="12336:12344" ph="{...}" />
+                <marker date="1522719511540" expanded="true" signature="12217:13105" ph="{...}" />
+                <marker date="1522719511540" expanded="true" signature="13097:13105" ph="{...}" />
+                <marker date="1522719511540" expanded="true" signature="13150:13320" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -100,31 +114,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ChoosePlod.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ChoosePlod.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ChoosePlod.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="337">
+            <state relative-caret-position="377">
               <caret line="103" column="50" lean-forward="false" selection-start-line="103" selection-start-column="50" selection-end-line="103" selection-end-column="50" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AdapterView.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/utils/AdapterView.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="31" column="5" lean-forward="false" selection-start-line="31" selection-start-column="5" selection-end-line="31" selection-end-column="5" />
-              <folding />
-            </state>
+      <file leaf-file-name="activity_scan.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_scan.xml">
+          <provider editor-type-id="android-designer2">
+            <state />
           </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="WriteCSVHelper.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/utils/WriteCSVHelper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="32" column="25" lean-forward="false" selection-start-line="32" selection-start-column="11" selection-end-line="32" selection-end-column="25" />
+            <state relative-caret-position="516">
+              <caret line="114" column="32" lean-forward="false" selection-start-line="114" selection-start-column="29" selection-end-line="114" selection-end-column="34" />
               <folding />
             </state>
           </provider>
@@ -133,7 +140,7 @@
       <file leaf-file-name="ScanBoxViewActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ScanBoxViewActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="643">
+            <state relative-caret-position="620">
               <caret line="52" column="28" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -163,7 +170,6 @@
       <find>oncl</find>
       <find>boxCount</find>
       <find>qrn</find>
-      <find>sPref</find>
       <find>dele</find>
       <find>clea</find>
       <find>saveText</find>
@@ -171,6 +177,7 @@
       <find>q</find>
       <find>boxean</find>
       <find>Cursor</find>
+      <find>sPref</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -1918,10 +1925,10 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_settings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/StartMenu.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ViewActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ScanActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/utils/BoxesAdapterView.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/Settings.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ChoosePlod.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ScanActivity.java" />
       </list>
     </option>
   </component>
@@ -2269,7 +2276,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1522719445535" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1522720347322" />
       </method>
     </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests">
@@ -2317,7 +2324,7 @@
       </Profilers>
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1522719445535" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1522720347322" />
       </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -2349,6 +2356,27 @@
         </option>
         <option name="vmOptions" />
       </ExternalSystemSettings>
+      <method />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
       <method />
     </configuration>
     <configuration default="true" type="JarApplication" factoryName="JAR Application">
@@ -2479,7 +2507,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1522719445536" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1522720347323" />
       </method>
     </configuration>
     <list size="1">
@@ -2542,7 +2570,7 @@
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24969475" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3285568" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32809225" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
@@ -2799,40 +2827,9 @@
         <state relative-caret-position="2385">
           <caret line="186" column="0" lean-forward="false" selection-start-line="186" selection-start-column="0" selection-end-line="186" selection-end-column="0" />
           <folding>
-            <element signature="e#3356#3601#0" expanded="true" />
-            <element signature="e#3600#3601#0" expanded="true" />
-            <element signature="e#3642#3822#0" expanded="true" />
-            <element signature="e#3821#3822#0" expanded="true" />
-            <marker date="1522718254242" expanded="true" signature="7680:10410" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="7680:10416" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="10458:10579" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="10618:10629" ph=" { " />
-            <marker date="1522718254242" expanded="true" signature="10670:10676" ph=" }" />
-            <marker date="1522718254242" expanded="true" signature="10710:10823" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="10853:10864" ph=" { " />
-            <marker date="1522718254242" expanded="true" signature="10916:10922" ph=" }" />
-            <marker date="1522718254242" expanded="true" signature="10954:11193" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="11232:11517" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="11553:12189" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="11836:11957" ph="(dialog, id) → {" />
-            <marker date="1522718254242" expanded="true" signature="12082:12113" ph="}" />
-            <marker date="1522718254242" expanded="true" signature="12222:13032" ph="{...}" />
-            <marker date="1522718254242" expanded="false" signature="12713:12728" ph="}" />
-            <marker date="1522718254242" expanded="false" signature="12754:12861" ph="(dialog, arg1) → {" />
-            <marker date="1522718254242" expanded="false" signature="12941:12956" ph="}" />
-            <marker date="1522718254242" expanded="true" signature="13067:13624" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="13664:13743" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="13783:14751" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="14543:14751" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="14799:15068" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="15140:15722" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="15222:15716" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="15778:16394" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="16442:16618" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="16664:16746" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="16793:16876" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="16920:17035" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="17082:17200" ph="{...}" />
+            <element signature="e#10854#10855#0" expanded="true" />
+            <element signature="e#10921#10922#0" expanded="true" />
+            <marker date="1522720187526" expanded="true" signature="7680:10410" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -2909,8 +2906,9 @@
         <state relative-caret-position="525">
           <caret line="71" column="36" lean-forward="false" selection-start-line="71" selection-start-column="36" selection-end-line="71" selection-end-column="36" />
           <folding>
-            <marker date="1522718756852" expanded="true" signature="11456:12344" ph="{...}" />
-            <marker date="1522718756852" expanded="true" signature="12336:12344" ph="{...}" />
+            <marker date="1522719511540" expanded="true" signature="12217:13105" ph="{...}" />
+            <marker date="1522719511540" expanded="true" signature="13097:13105" ph="{...}" />
+            <marker date="1522719511540" expanded="true" signature="13150:13320" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -2928,40 +2926,9 @@
         <state relative-caret-position="1260">
           <caret line="110" column="18" lean-forward="false" selection-start-line="110" selection-start-column="12" selection-end-line="110" selection-end-column="18" />
           <folding>
-            <element signature="e#3356#3601#0" expanded="true" />
-            <element signature="e#3600#3601#0" expanded="true" />
-            <element signature="e#3642#3822#0" expanded="true" />
-            <element signature="e#3821#3822#0" expanded="true" />
-            <marker date="1522718254242" expanded="true" signature="7680:10410" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="7680:10416" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="10458:10579" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="10618:10629" ph=" { " />
-            <marker date="1522718254242" expanded="true" signature="10670:10676" ph=" }" />
-            <marker date="1522718254242" expanded="true" signature="10710:10823" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="10853:10864" ph=" { " />
-            <marker date="1522718254242" expanded="true" signature="10916:10922" ph=" }" />
-            <marker date="1522718254242" expanded="true" signature="10954:11193" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="11232:11517" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="11553:12189" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="11836:11957" ph="(dialog, id) → {" />
-            <marker date="1522718254242" expanded="true" signature="12082:12113" ph="}" />
-            <marker date="1522718254242" expanded="true" signature="12222:13032" ph="{...}" />
-            <marker date="1522718254242" expanded="false" signature="12713:12728" ph="}" />
-            <marker date="1522718254242" expanded="false" signature="12754:12861" ph="(dialog, arg1) → {" />
-            <marker date="1522718254242" expanded="false" signature="12941:12956" ph="}" />
-            <marker date="1522718254242" expanded="true" signature="13067:13624" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="13664:13743" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="13783:14751" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="14543:14751" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="14799:15068" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="15140:15722" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="15222:15716" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="15778:16394" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="16442:16618" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="16664:16746" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="16793:16876" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="16920:17035" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="17082:17200" ph="{...}" />
+            <element signature="e#10854#10855#0" expanded="true" />
+            <element signature="e#10921#10922#0" expanded="true" />
+            <marker date="1522720187526" expanded="true" signature="7680:10410" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -3090,17 +3057,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_scan.xml">
-      <provider selected="true" editor-type-id="android-designer2">
-        <state />
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="855">
-          <caret line="57" column="48" lean-forward="false" selection-start-line="57" selection-start-column="48" selection-end-line="57" selection-end-column="48" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_settings.xml">
       <provider selected="true" editor-type-id="android-designer2">
         <state />
@@ -3136,49 +3092,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ScanActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2012">
-          <caret line="286" column="5" lean-forward="true" selection-start-line="286" selection-start-column="5" selection-end-line="286" selection-end-column="5" />
-          <folding>
-            <element signature="e#3356#3601#0" expanded="true" />
-            <element signature="e#3600#3601#0" expanded="true" />
-            <element signature="e#3642#3822#0" expanded="true" />
-            <element signature="e#3821#3822#0" expanded="true" />
-            <marker date="1522718254242" expanded="true" signature="7680:10410" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="7680:10416" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="10458:10579" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="10618:10629" ph=" { " />
-            <marker date="1522718254242" expanded="true" signature="10670:10676" ph=" }" />
-            <marker date="1522718254242" expanded="true" signature="10710:10823" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="10853:10864" ph=" { " />
-            <marker date="1522718254242" expanded="true" signature="10916:10922" ph=" }" />
-            <marker date="1522718254242" expanded="true" signature="10954:11193" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="11232:11517" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="11553:12189" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="11836:11957" ph="(dialog, id) → {" />
-            <marker date="1522718254242" expanded="true" signature="12082:12113" ph="}" />
-            <marker date="1522718254242" expanded="true" signature="12222:13032" ph="{...}" />
-            <marker date="1522718254242" expanded="false" signature="12713:12728" ph="}" />
-            <marker date="1522718254242" expanded="false" signature="12754:12861" ph="(dialog, arg1) → {" />
-            <marker date="1522718254242" expanded="false" signature="12941:12956" ph="}" />
-            <marker date="1522718254242" expanded="true" signature="13067:13624" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="13664:13743" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="13783:14751" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="14543:14751" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="14799:15068" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="15140:15722" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="15222:15716" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="15778:16394" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="16442:16618" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="16664:16746" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="16793:16876" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="16920:17035" ph="{...}" />
-            <marker date="1522718254242" expanded="true" signature="17082:17200" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/utils/AdapterView.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
@@ -3200,16 +3113,6 @@
         <state relative-caret-position="390">
           <caret line="39" column="18" lean-forward="false" selection-start-line="39" selection-start-column="18" selection-end-line="39" selection-end-column="18" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ScanBoxViewActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="643">
-          <caret line="52" column="28" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -3238,10 +3141,11 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ViewActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2742">
-          <caret line="243" column="34" lean-forward="false" selection-start-line="243" selection-start-column="34" selection-end-line="243" selection-end-column="34" />
+          <caret line="257" column="34" lean-forward="false" selection-start-line="257" selection-start-column="34" selection-end-line="257" selection-end-column="34" />
           <folding>
-            <marker date="1522718756852" expanded="true" signature="11456:12344" ph="{...}" />
-            <marker date="1522718756852" expanded="true" signature="12336:12344" ph="{...}" />
+            <marker date="1522719511540" expanded="true" signature="12217:13105" ph="{...}" />
+            <marker date="1522719511540" expanded="true" signature="13097:13105" ph="{...}" />
+            <marker date="1522719511540" expanded="true" signature="13150:13320" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -3262,14 +3166,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/utils/CSVReadingHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="310">
-          <caret line="32" column="0" lean-forward="false" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/utils/Database.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="870">
@@ -3280,9 +3176,50 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ChoosePlod.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="337">
+        <state relative-caret-position="377">
           <caret line="103" column="50" lean-forward="false" selection-start-line="103" selection-start-column="50" selection-end-line="103" selection-end-column="50" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ScanBoxViewActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="620">
+          <caret line="52" column="28" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/utils/CSVReadingHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="310">
+          <caret line="32" column="0" lean-forward="false" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_scan.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="516">
+          <caret line="114" column="32" lean-forward="false" selection-start-line="114" selection-start-column="29" selection-end-line="114" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/azbuka/gshabalov/tsd_alcho_app/Activity/ScanActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1207">
+          <caret line="354" column="37" lean-forward="false" selection-start-line="354" selection-start-column="37" selection-end-line="354" selection-end-column="37" />
+          <folding>
+            <element signature="e#10854#10855#0" expanded="true" />
+            <element signature="e#10921#10922#0" expanded="true" />
+            <marker date="1522720187526" expanded="true" signature="7680:10410" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
