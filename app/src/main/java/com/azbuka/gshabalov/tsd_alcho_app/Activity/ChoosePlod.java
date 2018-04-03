@@ -99,6 +99,12 @@ public class ChoosePlod extends BaseActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, StartMenu.class);
+        this.startActivity(intent);
+        super.onBackPressed();
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private boolean requestForPermission() {

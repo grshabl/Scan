@@ -35,9 +35,9 @@ public class BoxesAdapterView extends RecyclerView.Adapter<BoxesAdapterView.View
 
         ViewHolder(View itemView) {
             super(itemView);
-            cv = (CardView)itemView.findViewById(R.id.cv);
-            Name = (TextView)itemView.findViewById(R.id.textasd);
-            Age = (TextView)itemView.findViewById(R.id.textasder);
+            cv = itemView.findViewById(R.id.cv);
+            Name = itemView.findViewById(R.id.textasd);
+            Age = itemView.findViewById(R.id.textasder);
 
 
         }
