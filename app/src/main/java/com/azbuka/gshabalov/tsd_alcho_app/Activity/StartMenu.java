@@ -51,7 +51,7 @@ public class StartMenu extends BaseActivity {
 
 
             case R.id.ext:
-
+                finishAffinity();
                 break;
 
 
