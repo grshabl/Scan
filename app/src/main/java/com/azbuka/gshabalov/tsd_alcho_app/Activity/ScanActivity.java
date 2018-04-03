@@ -137,7 +137,7 @@ public class ScanActivity extends BaseActivity {
 
     private boolean checkQR(String qr) {
         boolean include = false;
-        if (cursor.moveToFirst() && !qrk) {
+        if (cursor.moveToFirst()) {
             int start = cursor.getColumnIndex(Database.STARTNUM);
             int end = cursor.getColumnIndex(Database.ENDNUM);
             int plodline = cursor.getColumnIndex(Database.PLOD_LINE);
@@ -152,20 +152,6 @@ public class ScanActivity extends BaseActivity {
                     return true;
                 }
             } while (cursor.moveToNext());
-        }
-        if(qrk) {
-            int start = cursor.getColumnIndex(Database.STARTNUM);
-            int end = cursor.getColumnIndex(Database.ENDNUM);
-            int plodline = cursor.getColumnIndex(Database.PLOD_LINE);
-            int goodscode = cursor.getColumnIndex(Database.GOODS_CODE);
-            int multiplicity = cursor.getColumnIndex(Database.MULTIPLICITY);
-            if (cursor.getString(start).hashCode() <= qr.hashCode() && cursor.getString(end).hashCode() >= qr.hashCode()) {
-                this.plodLine = cursor.getString(plodline);
-                this.goodsCode = cursor.getString(goodscode);
-                this.multiplicity = cursor.getString(multiplicity);
-                qrk = true;
-                return true;
-            }
         }
         return include;
     }
@@ -219,8 +205,8 @@ public class ScanActivity extends BaseActivity {
             } else {
                 if (scanenable) {
                     String[] multi = multiplicity.split("~");
-                    if (checkScan() && data[0] != null && multi!=null &&
-                            Integer.parseInt(multi[multi.length-1])>=boxcount()) {
+                    if (data[0] != null &&
+                            Integer.parseInt(multi[multi.length-1])>=Integer.parseInt(boxCount.getText().toString())) {
                         Alert("Просканировано максимальное количество бутылок");
                     }
                     switch (scanStr.length()) {
