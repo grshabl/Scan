@@ -1,6 +1,8 @@
 package com.azbuka.gshabalov.tsd_alcho_app.Activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -42,12 +44,12 @@ public class Settings extends Activity {
                 plodNames.add(cursor.getString(index));
             } while (cursor.moveToNext());
             cursor.close();
+            spinner = findViewById(R.id.spinner);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, plodNames);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(adapter);
         }
 
-        spinner = findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, plodNames);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
     }
 
 
@@ -55,8 +57,7 @@ public class Settings extends Activity {
         switch (v.getId()) {
 
             case R.id.deletePlod:
-                //saveText(spinner.getSelectedItem().toString(), current);
-
+                clearbase();
                 break;
 
 
@@ -69,7 +70,7 @@ public class Settings extends Activity {
     }
 
     private void clearbase() {
-        readBase.delete(Database.DATABASE_SCAN, Database.PLOD, new String[]{spinner.getSelectedItem().toString()});
+        readBase.delete(Database.DATABASE_WRITE, Database.PLOD, new String[]{spinner.getSelectedItem().toString()});
     }
 
     void saveText(String lpb) {
@@ -77,6 +78,22 @@ public class Settings extends Activity {
         SharedPreferences.Editor ed = sPref.edit();
         ed.putString(Database.GOODS_LPB, lpb);
         ed.apply();
+    }
+
+
+    public void Alert(String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Settings.this);
+        builder.setTitle("Информация")
+                .setMessage(msg)
+                .setCancelable(false)
+                .setNegativeButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 

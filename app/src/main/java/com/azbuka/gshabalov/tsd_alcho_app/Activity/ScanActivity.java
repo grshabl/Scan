@@ -374,12 +374,10 @@ public class ScanActivity extends BaseActivity {
         switch (v.getId()) {
 
             case R.id.erase:
-                data[0] = null;
                 data[1] = null;
                 data[2] = null;
                 qrCode.setText("");
                 pdf417Code.setText("");
-                description.setText("");
                 break;
 
             case R.id.cantPdf:
