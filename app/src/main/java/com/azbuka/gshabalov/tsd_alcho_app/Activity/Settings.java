@@ -47,6 +47,7 @@ public class Settings extends Activity {
             spinner = findViewById(R.id.spinner);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, plodNames);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            if(adapter!=null)
             spinner.setAdapter(adapter);
         }
 
