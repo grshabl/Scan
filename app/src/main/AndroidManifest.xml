@@ -36,7 +36,24 @@
                 <action android:name="device.scanner.USERMSG" />
             </intent-filter>
         </receiver>
-
+        <receiver
+            android:name=".Activity.ViewActivity$ScanResultReceiver"
+            android:enabled="false"
+            android:permission=".app.permission.SCANNER_RESULT_RECEIVER"
+            android:priority="0">
+            <intent-filter>
+                <action android:name="device.scanner.USERMSG" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".Activity.BoxViewActivity$ScanResultReceiver"
+            android:enabled="false"
+            android:permission=".app.permission.SCANNER_RESULT_RECEIVER"
+            android:priority="0">
+            <intent-filter>
+                <action android:name="device.scanner.USERMSG" />
+            </intent-filter>
+        </receiver>
         <activity android:name=".Activity.BoxViewActivity"></activity>
     </application>
 
