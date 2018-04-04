@@ -14,6 +14,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,8 +42,7 @@ public class ScanActivity extends BaseActivity {
     private TextView description, qrCode, pdf417Code, boxCount;
     private EditText code;
     private Button entercode;
-    private boolean multic = false;
-    private int multis = -1;
+
     Database database;
     SQLiteDatabase readBase;
     ContentValues contentValues;
@@ -59,6 +59,7 @@ public class ScanActivity extends BaseActivity {
     private String lpb;
     private String multiplicity;
     private Boolean scanenable = true;
+    private String mult ="0";
 
     String[] pole = {Database.STARTNUM, Database.ENDNUM, Database.GOODS_NAME, Database.GOODS_CODE, Database.PLOD_LINE, Database.MULTIPLICITY};
 
@@ -75,12 +76,19 @@ public class ScanActivity extends BaseActivity {
         readBase = database.getWritableDatabase();
         description = findViewById(R.id.description);
         data = new String[3];
+        if(mult.equals("0") && boxcount()!=0){
+            Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_SCAN,null);
+            if(c.moveToFirst()){
+                mult = c.getString(c.getColumnIndex(Database.GOODS_MULTI));
+            }
+        }
 
         if (boxean != null && !boxean.equals("")) {
             data[0] = boxean;
             checkInPlod(boxean);
             description.setText(sPref.getString(Database.GOODS_NAME, ""));
         }
+
 
 
         PackageManager pm = ScanActivity.this.getPackageManager();
@@ -149,12 +157,7 @@ public class ScanActivity extends BaseActivity {
                     this.plodLine = cursor.getString(plodline);
                     this.goodsCode = cursor.getString(goodscode);
                     this.multiplicity = cursor.getString(multiplicity);
-                    String[] ml = this.multiplicity.split("~");
-                    for (String mul:
-                            ml) {
-                        if(mul!=null)
-                            multis = Integer.parseInt(mul);
-                    }
+                    this.mult = this.multiplicity;
                     return true;
                 }
             } while (cursor.moveToNext());
@@ -177,7 +180,7 @@ public class ScanActivity extends BaseActivity {
         contentValues.put(Database.MARK_BAD, markbad);
         contentValues.put(Database.BOX_EAN, lpb);
         contentValues.put(Database.MULTIPLICITY, multiplicity);
-
+        contentValues.put(Database.GOODS_MULTI,mult);
         readBase.insert(Database.DATABASE_SCAN, null, contentValues);
         boxCount.setText(boxcount().toString());
         contentValues.clear();
@@ -204,14 +207,20 @@ public class ScanActivity extends BaseActivity {
                     chooseAlert(scanStr);
                 else if (data[1] == null && data[2] == null){
                     lpb = scanStr;
+                    readBase.execSQL(String.format("Update %s set %s = '0'", Database.DATABASE_SCAN, Database.MULTIPLICITY));
                     twoInOne(lpb);
                 } else {
                     Alert("Сначала закончите сканирование бутылки");
                 }
             } else {
                 if (scanenable) {
-                    String[] multi = multiplicity.split("~");
-
+                    if(!mult.equals("0")) {
+                        String[] multi = mult.split("~");
+                        if(Integer.parseInt(multi[multi.length-1])<=boxcount()){
+                            Alert("Было введено максималное количество бутылок");
+                            return;
+                        }
+                    }
                     switch (scanStr.length()) {
                         case 13:
                             if (checkScan() && data[0] != null) {
@@ -229,12 +238,7 @@ public class ScanActivity extends BaseActivity {
                             } else if (errorQR(scanStr).equals(data[1]) || qrnew(errorQR(scanStr))) {
                                 Alert("QR уже был считан");
                             } else {
-                                if (data[0] != null && multis!=-1 &&
-                                        multis<=Integer.parseInt(boxCount.getText().toString())
-                                        && Integer.parseInt(boxCount.getText().toString())>0) {
-                                    Alert("Просканировано максимальное количество бутылок");
-                                    break;
-                                }
+
                                 if (checkQR(scanStr.substring(3, 11))) {
                                     data[1] = errorQR(scanStr); //QR scan
                                     qrDestroy(errorQR(scanStr));
@@ -250,12 +254,7 @@ public class ScanActivity extends BaseActivity {
                             } else if (scanStr.equals(data[1]) || qrnew(scanStr)) {
                                 Alert("QR уже был считан");
                             } else {
-                                if (data[0] != null && multis!=-1 &&
-                                        multis<=Integer.parseInt(boxCount.getText().toString())
-                                        && Integer.parseInt(boxCount.getText().toString())>0) {
-                                    Alert("Просканировано максимальное количество бутылок");
-                                    break;
-                                }
+
                                 if (checkQR(scanStr.substring(7, 15))) {
                                     data[1] = scanStr; //QR scan
                                     qrDestroy(scanStr);
@@ -267,12 +266,7 @@ public class ScanActivity extends BaseActivity {
 
                         case 68:
                             if (data[0] != null) {
-                                if (data[0] != null && multis!=-1 &&
-                                        multis<=Integer.parseInt(boxCount.getText().toString())
-                                        && Integer.parseInt(boxCount.getText().toString())>0) {
-                                    Alert("Просканировано максимальное количество бутылок");
-                                    break;
-                                }
+
                                 data[2] = scanStr; //PDF
                                 pdf417Code.setText("считан");
                             } else {
@@ -362,7 +356,6 @@ public class ScanActivity extends BaseActivity {
                 setMultiplicityError();
                 lpb = scanStr;
                 twoInOne(lpb);
-                twoInOne(lpb);
             }
         });
         AlertDialog alert = builder.create();
@@ -381,11 +374,12 @@ public class ScanActivity extends BaseActivity {
                 break;
 
             case R.id.cantPdf:
-                if (data[0] != null && multis!=-1 &&
-                        multis<=Integer.parseInt(boxCount.getText().toString())
-                        && Integer.parseInt(boxCount.getText().toString())>0) {
-                    Alert("Просканировано максимальное количество бутылок");
-                    break;
+                if(!mult.equals("0")) {
+                    String[] multi = mult.split("~");
+                    if(Integer.parseInt(multi[multi.length-1])<=boxcount()){
+                        Alert("Было введено максималное количество бутылок");
+                        break;
+                    }
                 }
                 data[2] = "0";
                 markbad = "1";
@@ -501,7 +495,17 @@ public class ScanActivity extends BaseActivity {
         boxCount.setText(boxcount().toString());
         super.onRestart();
     }
+    @Override
+    protected void onStart(){
+        boxean = sPref.getString(Database.BOX_EAN, "");
+        if (boxean != null && !boxean.equals("")) {
+            data[0] = boxean;
+            checkInPlod(boxean);
+            description.setText(sPref.getString(Database.GOODS_NAME, ""));
+        }
+        super.onStart();
 
+    }
     @Override
     protected void onStop() {
         saveText(description.getText().toString(), boxean);
@@ -511,6 +515,7 @@ public class ScanActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+        Log.d("logs","onDestroy");
         saveText(description.getText().toString(), boxean);
         cursor.close();
         super.onDestroy();

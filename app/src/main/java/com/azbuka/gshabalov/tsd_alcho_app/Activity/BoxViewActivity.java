@@ -111,6 +111,7 @@ public class BoxViewActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_box_view);
+
         activity = this;
         intent = getIntent();
         TextView lpbText = findViewById(R.id.lpbText);
@@ -129,16 +130,7 @@ public class BoxViewActivity extends Activity {
             @Override
             public void onClick(View view) {
                 kostil = 1;
-                PackageManager pm = BoxViewActivity.this.getPackageManager();
-                ComponentName componentName = new ComponentName(BoxViewActivity.this, BoxViewActivity.ScanResultReceiver.class);
-                pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                        PackageManager.DONT_KILL_APP);
 
-                try {
-                    initScanner();
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
                 LayoutInflater li = LayoutInflater.from(context);
                 View promptsView = li.inflate(R.layout.alert_dialog, null);
 
@@ -244,6 +236,16 @@ public class BoxViewActivity extends Activity {
 
             }
         });
+        PackageManager pm = BoxViewActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(BoxViewActivity.this, BoxViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+
+        try {
+            initScanner();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -278,6 +280,56 @@ public class BoxViewActivity extends Activity {
             iScanner.aDecodeSetDecodeEnable(1);
             iScanner.aDecodeSetResultType(ScannerService.ResultType.DCD_RESULT_USERMSG);
         }
+    }
+    @Override
+    protected void onResume(){
+        PackageManager pm = BoxViewActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(BoxViewActivity.this, BoxViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+        super.onResume();
+    }
+    @Override
+    protected void onRestart(){
+        PackageManager pm = BoxViewActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(BoxViewActivity.this, BoxViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+        super.onRestart();
+    }
+
+    @Override
+    protected void onPause(){
+        PackageManager pm = BoxViewActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(BoxViewActivity.this, BoxViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        super.onPause();
+    }
+    @Override
+    protected void onStop(){
+        PackageManager pm = BoxViewActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(BoxViewActivity.this, BoxViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        super.onStop();
+    }
+    @Override
+    protected void onDestroy() {
+        if (iScanner != null) {
+            try {
+                iScanner.aDecodeAPIDeinit();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        iScanner = null;
+        PackageManager pm = BoxViewActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(BoxViewActivity.this, BoxViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        super.onDestroy();
+
     }
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);

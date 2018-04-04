@@ -16,6 +16,8 @@ public class Database extends SQLiteOpenHelper {
     public static final String DATABASE_WRITE = "write";
     public static final String DATABASE_READ = "read";
     public static final String DATABASE_SCAN = "scan";
+    public static final String DATABASE_TEMP = "tmp";
+
 
     public static final String LINE = "_id";
     public static final String BOTTLE_ID = "id";
@@ -33,8 +35,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String GOODS_CODE = "goodscode";
     public static final String GOODS_NAME = "goodsName";
     public static final String GOODS_LPB = "lpb";
-
-
+    public static final String GOODS_MULTI = "multi";
 
 
     public Database(Context context) {
@@ -55,13 +56,15 @@ public class Database extends SQLiteOpenHelper {
                 + " integer primary key," + PLOD + " text," + PLOD_LINE + " text," + GOODS_CODE + " text," + QR +" text,"
                 + PDF417 + " text," + MARK_BAD + " text,"
                 + BOX_EAN +" text,"
-                + GOODS_LPB + " text," + MULTIPLICITY + " text" + ")");
+                + GOODS_LPB + " text," + MULTIPLICITY + " text,"
+                + GOODS_MULTI + " text" + ")");
 
 
         db.execSQL("create table " + DATABASE_READ + "(" + LINE
                 + " integer primary key," + PLOD + " text," + PLOD_DAY + " text," + PLOD_LINE + " text," + GOODS_CODE + " text," + BOX_EAN + " text," + GOODS_NAME +" text,"  +
                 SERIAL + " text," + STARTNUM + " text," + ENDNUM + " text," + MULTIPLICITY + " text" + ")");
 
+        db.execSQL("create table " + DATABASE_TEMP + "(" + PLOD + " text," + BOX_EAN + " text" + ")");
     }
 
     @Override
