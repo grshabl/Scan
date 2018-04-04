@@ -1,5 +1,6 @@
 package com.azbuka.gshabalov.tsd_alcho_app.Activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -16,6 +17,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -49,6 +51,7 @@ public class ScanActivity extends BaseActivity {
     Cursor cursor;
     SharedPreferences sPref;
 
+    private Activity activity;
 
     private String goodsname = "";
     private String plod = "";
@@ -68,6 +71,7 @@ public class ScanActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
         entercode = findViewById(R.id.enterCode);
+        activity = this;
         barScan = new BarScan();
         sPref = getSharedPreferences("DataShared", MODE_PRIVATE);
         plod = sPref.getString(Database.PLOD, "");
@@ -135,6 +139,11 @@ public class ScanActivity extends BaseActivity {
             boxean = ean;
             return true;
         } else {
+            description.setText("");
+            if(!cursor.isClosed()){
+                cursor.close();
+            }
+            boxean = "";
             Alert("Данного товара нет в выбранном PLOD");
             return false;
         }
@@ -195,9 +204,13 @@ public class ScanActivity extends BaseActivity {
 
     public class BarScan {
         private void chooseType(String scanStr) {
+            code.setText("");
+            hideKeyboard(activity);
             if (lpb(scanStr)) {
-                String[] multi = multiplicity.split("~");
+                String[] multi = mult.split("~");
                 boolean flag = false;
+                if(mult.equals("0"))
+                    flag = true;
                 for(String mult: multi){
                     if(boxcount()==Integer.parseInt(mult)){
                         flag = true;
@@ -207,6 +220,7 @@ public class ScanActivity extends BaseActivity {
                     chooseAlert(scanStr);
                 else if (data[1] == null && data[2] == null){
                     lpb = scanStr;
+                    boxCount.setText("0");
                     readBase.execSQL(String.format("Update %s set %s = '0'", Database.DATABASE_SCAN, Database.MULTIPLICITY));
                     twoInOne(lpb);
                 } else {
@@ -223,7 +237,7 @@ public class ScanActivity extends BaseActivity {
                     }
                     switch (scanStr.length()) {
                         case 13:
-                            if (checkScan() && data[0] != null) {
+                            if (checkScan() && data[0] != null && boxcount()!=0) {
                                 Alert("Сначала закройте коробку");
                             } else {
                                 if (checkInPlod(scanStr)) {
@@ -347,13 +361,14 @@ public class ScanActivity extends BaseActivity {
     private void chooseAlert(final String scanStr) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);
-        builder.setTitle("Внимание!").setMessage("Количество просканированных бутылок (" + boxCount.getText().toString() + ") не соответсвует кратности (" + multiplicity.replace("~", ".") + ") .Продолжить? ").setCancelable(false).setNegativeButton("Закрыть", new DialogInterface.OnClickListener() {
+        builder.setTitle("Внимание!").setMessage("Количество просканированных бутылок (" + boxCount.getText().toString() + ") не соответсвует кратности (" + mult.replace("~", ".") + ") .Продолжить? ").setCancelable(false).setNegativeButton("Закрыть", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();
             }
         }).setPositiveButton("Ок", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int arg1) {
                 setMultiplicityError();
+                boxCount.setText("0");
                 lpb = scanStr;
                 twoInOne(lpb);
             }
@@ -390,12 +405,21 @@ public class ScanActivity extends BaseActivity {
 
             case R.id.enterCode:
                 barScan.chooseType(code.getText().toString());
+                code.setText("");
+                hideKeyboard(activity);
                 break;
 
 
         }
     }
-
+    private static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = activity.getCurrentFocus();
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
     private void qrDestroy(String qr) {
         qrCode.setText(qr.substring(4, 7) + " " + qr.substring(7, 15));
     }
@@ -497,6 +521,12 @@ public class ScanActivity extends BaseActivity {
     }
     @Override
     protected void onStart(){
+        if(mult.equals("0") && boxcount()!=0){
+            Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_SCAN,null);
+            if(c.moveToFirst()){
+                mult = c.getString(c.getColumnIndex(Database.GOODS_MULTI));
+            }
+        }
         boxean = sPref.getString(Database.BOX_EAN, "");
         if (boxean != null && !boxean.equals("")) {
             data[0] = boxean;
