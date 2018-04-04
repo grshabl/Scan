@@ -274,7 +274,7 @@ public class ViewActivity extends Activity {
 
         String foldeName = "/storage/sdcard0/AvExchange/Out";
         //Имя файла нужно указывать с расширением если оно нужно
-        String fileName = "Out";
+        String fileName = "Out.txt";
 
         String[] string = new String[8];
         String[] strings = {"", "", ""};
