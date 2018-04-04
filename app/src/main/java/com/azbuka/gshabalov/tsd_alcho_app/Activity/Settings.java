@@ -1,6 +1,8 @@
 package com.azbuka.gshabalov.tsd_alcho_app.Activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -30,6 +32,7 @@ public class Settings extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         ArrayList<String> plodNames = new ArrayList<>();
+        spinner = findViewById(R.id.spinirishe);
 
         template = findViewById(R.id.edittextishe);
         readDatabase = new Database(this);
@@ -41,12 +44,13 @@ public class Settings extends Activity {
                 plodNames.add(cursor.getString(index));
             } while (cursor.moveToNext());
             cursor.close();
+            spinner = findViewById(R.id.spinner);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, plodNames);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            if(adapter!=null)
+            spinner.setAdapter(adapter);
         }
 
-        spinner = findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, plodNames);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
     }
 
 
@@ -54,8 +58,7 @@ public class Settings extends Activity {
         switch (v.getId()) {
 
             case R.id.deletePlod:
-                //saveText(spinner.getSelectedItem().toString(), current);
-
+                clearbase();
                 break;
 
 
@@ -68,7 +71,7 @@ public class Settings extends Activity {
     }
 
     private void clearbase() {
-        readBase.delete(Database.DATABASE_SCAN, Database.PLOD, new String[]{spinner.getSelectedItem().toString()});
+        readBase.delete(Database.DATABASE_WRITE, Database.PLOD, new String[]{spinner.getSelectedItem().toString()});
     }
 
     void saveText(String lpb) {
@@ -78,35 +81,22 @@ public class Settings extends Activity {
         ed.apply();
     }
 
-    private void outData(SQLiteDatabase db){
-        WriteCSVHelper writeCSVHelper;
 
-        String foldeName = "/storage/sdcard0/AvExchange/Out";
-        //Имя файла нужно указывать с расширением если оно нужно
-        String fileName = "Out";
-
-        String[] string = new String[8];
-        String[] strings = {"", "", ""};
-
-        writeCSVHelper = new WriteCSVHelper(foldeName, fileName, WriteCSVHelper.SEMICOLON_SEPARATOR);
-        Cursor c = db.rawQuery("SELECT * FROM "+ Database.DATABASE_WRITE,null);
-        if(c.moveToFirst()) {
-            do {
-                string[0] = c.getString(1);
-                string[1] = c.getString(2);
-                string[2] = c.getString(3);
-                string[3] = c.getString(4);
-                string[4] = c.getString(5);
-                string[5] = c.getString(6);
-                string[6] = c.getString(7);
-                string[7] = c.getString(8);
-                writeCSVHelper.writeLine(string);
-            }while (c.moveToNext());
-
-        }
-        writeCSVHelper.writeLine(strings);
-        writeCSVHelper.close();
-        db.delete(Database.DATABASE_WRITE,"1",null);
+    public void Alert(String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Settings.this);
+        builder.setTitle("Информация")
+                .setMessage(msg)
+                .setCancelable(false)
+                .setNegativeButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
+
+
 
 }

@@ -47,12 +47,14 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL("create table " + DATABASE_WRITE + "(" + BOTTLE_ID
                 + " integer primary key," + PLOD + " text," + PLOD_LINE + " text," + GOODS_CODE + " text," + QR +" text,"
                 + PDF417 + " text," + MARK_BAD + " text,"
+                + BOX_EAN +" text,"
                 + GOODS_LPB + " text," + MULTIPLICITY + " text" + ")");
 
 
         db.execSQL("create table " + DATABASE_SCAN + "(" + BOTTLE_ID
                 + " integer primary key," + PLOD + " text," + PLOD_LINE + " text," + GOODS_CODE + " text," + QR +" text,"
                 + PDF417 + " text," + MARK_BAD + " text,"
+                + BOX_EAN +" text,"
                 + GOODS_LPB + " text," + MULTIPLICITY + " text" + ")");
 
 

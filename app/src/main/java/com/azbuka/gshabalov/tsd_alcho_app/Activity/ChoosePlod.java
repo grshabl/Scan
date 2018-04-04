@@ -52,10 +52,10 @@ public class ChoosePlod extends BaseActivity {
         }
 
 
-        File file = new File("/storage/sdcard0/AvExchange/In");
+        File file = new File("/storage/emulated/0/AvExchange/In");
         File[] files = file.listFiles();
 
-        if (files.length != 0) {
+        if (files!=null && files.length != 0) {
             for (File f : files) {
                 if (f.toString().hashCode() > current.hashCode() || current.equals("")) {
                     current = f.toString();
@@ -99,6 +99,12 @@ public class ChoosePlod extends BaseActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, StartMenu.class);
+        this.startActivity(intent);
+        super.onBackPressed();
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private boolean requestForPermission() {

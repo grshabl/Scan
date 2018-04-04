@@ -13,9 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
-/**
- * Created by gshabalov on 29.03.2018.
- */
+
 
 public class CSVReadingHelper {
     BufferedReader reader;

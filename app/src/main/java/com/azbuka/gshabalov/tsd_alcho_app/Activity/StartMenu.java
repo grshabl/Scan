@@ -38,7 +38,8 @@ public class StartMenu extends BaseActivity {
                 break;
 
             case R.id.settings:
-
+                intent = new Intent(this, Settings.class);
+                startActivity(intent);
                 break;
 
 
@@ -50,7 +51,7 @@ public class StartMenu extends BaseActivity {
 
 
             case R.id.ext:
-
+                finishAffinity();
                 break;
 
 

@@ -115,8 +115,8 @@
             android:id="@+id/erase"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:onClick="onClick"
             android:layout_weight="1"
+            android:onClick="onClick"
             android:text="@string/dataclear" />
 
         <Button

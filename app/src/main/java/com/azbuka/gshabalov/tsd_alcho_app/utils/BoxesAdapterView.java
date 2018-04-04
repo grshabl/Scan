@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.azbuka.gshabalov.tsd_alcho_app.Activity.BoxViewActivity;
+import com.azbuka.gshabalov.tsd_alcho_app.Activity.ViewActivity;
 import com.azbuka.gshabalov.tsd_alcho_app.R;
 
 import java.util.List;
@@ -29,9 +30,9 @@ public class BoxesAdapterView extends RecyclerView.Adapter<BoxesAdapterView.View
 
         ViewHolder(View itemView) {
             super(itemView);
-            cv = (CardView)itemView.findViewById(R.id.cv);
-            Name = (TextView)itemView.findViewById(R.id.textasd);
-            Age = (TextView)itemView.findViewById(R.id.textasder);
+            cv = itemView.findViewById(R.id.cv);
+            Name = itemView.findViewById(R.id.textasd);
+            Age = itemView.findViewById(R.id.textasder);
 
 
         }
@@ -67,6 +68,7 @@ public class BoxesAdapterView extends RecyclerView.Adapter<BoxesAdapterView.View
                 public void onClick(View view) {
                     Intent inten = new Intent(context, BoxViewActivity.class);
                     inten.putExtra("boxId", items.get(i).item1);
+                    ViewActivity.boxId = items.get(i).item1;
                     inten.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                     inten.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(inten);
