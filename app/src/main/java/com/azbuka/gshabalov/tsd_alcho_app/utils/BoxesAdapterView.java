@@ -17,7 +17,6 @@ import com.azbuka.gshabalov.tsd_alcho_app.R;
 import java.util.List;
 
 
-
 public class BoxesAdapterView extends RecyclerView.Adapter<BoxesAdapterView.ViewHolder> {
 
     Context context;

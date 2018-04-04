@@ -22,6 +22,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.azbuka.gshabalov.tsd_alcho_app.BaseActivity;
 import com.azbuka.gshabalov.tsd_alcho_app.R;
@@ -58,7 +59,7 @@ public class ViewActivity extends Activity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
+            Toast.makeText(context,"Я вызвался",Toast.LENGTH_LONG).show();
             if (iScanner != null) {
                 try {
                     mDecodeResult.recycle();
@@ -210,7 +211,10 @@ public class ViewActivity extends Activity {
             }
         });
         initializeAdapter();
-
+        PackageManager pm = ViewActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(ViewActivity.this, ViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
 
         try {
             initScanner();
@@ -219,10 +223,39 @@ public class ViewActivity extends Activity {
         }
 
     }
+    @Override
+    protected void onResume(){
+        PackageManager pm = ViewActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(ViewActivity.this, ViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+        super.onResume();
+    }
+    @Override
+    protected void onRestart(){
+        PackageManager pm = ViewActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(ViewActivity.this, ViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+        super.onRestart();
+    }
 
-
-
-
+    @Override
+    protected void onPause(){
+        PackageManager pm = ViewActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(ViewActivity.this, ViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        super.onPause();
+    }
+    @Override
+    protected void onStop(){
+        PackageManager pm = ViewActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(ViewActivity.this, ViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        super.onStop();
+    }
     @Override
     protected void onDestroy() {
         if (iScanner != null) {
@@ -244,7 +277,6 @@ public class ViewActivity extends Activity {
     @Override
     public void onBackPressed() {
         // super.onBackPressed();
-
         Intent intent = new Intent(getApplicationContext(), StartMenu.class);
         startActivity(intent);
 
