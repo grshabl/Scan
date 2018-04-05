@@ -3,7 +3,6 @@ package com.azbuka.gshabalov.tsd_alcho_app.Activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,10 +13,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.azbuka.gshabalov.tsd_alcho_app.R;
-import com.azbuka.gshabalov.tsd_alcho_app.utils.CSVReadingHelper;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Database;
-import com.azbuka.gshabalov.tsd_alcho_app.utils.Items;
-import com.azbuka.gshabalov.tsd_alcho_app.utils.WriteCSVHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -95,6 +91,9 @@ public class Settings extends Activity {
     }
 
     private void clearbase() {
+        Object selected = spinner.getSelectedItem();
+        if (selected == null || selected.toString().isEmpty()) return;
+
         readBase.delete(Database.DATABASE_WRITE,Database.PLOD + " = '"+spinner.getSelectedItem().toString()+"'",null);
         Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE,null);
         Map<String,Integer> map = new HashMap<>();

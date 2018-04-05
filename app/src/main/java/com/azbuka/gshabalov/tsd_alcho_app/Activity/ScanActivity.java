@@ -23,12 +23,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.azbuka.gshabalov.tsd_alcho_app.BaseActivity;
 import com.azbuka.gshabalov.tsd_alcho_app.R;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Database;
-
-import java.util.ArrayList;
 
 import device.scanner.DecodeResult;
 import device.scanner.IScannerService;
@@ -539,7 +536,7 @@ public class ScanActivity extends BaseActivity {
     @Override
     protected void onStop() {
         saveText(description.getText().toString(), boxean);
-        cursor.close();
+        if (cursor != null) cursor.close();
         super.onStop();
     }
 
@@ -547,7 +544,7 @@ public class ScanActivity extends BaseActivity {
     protected void onDestroy() {
         Log.d("logs","onDestroy");
         saveText(description.getText().toString(), boxean);
-        cursor.close();
+        if (cursor != null) cursor.close();
         super.onDestroy();
     }
 }
