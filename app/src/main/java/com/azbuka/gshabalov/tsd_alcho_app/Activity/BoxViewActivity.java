@@ -52,6 +52,7 @@ public class BoxViewActivity extends Activity {
     private Activity activity;
     private static RecyclerView rv;
     Database database;
+    private static String boxId;
     private static SQLiteDatabase readBase;
     private static Intent intent;
     private static int kostil = 0;
@@ -145,10 +146,10 @@ public class BoxViewActivity extends Activity {
                     public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                         if(keyEvent.getAction()==keyEvent.ACTION_DOWN){
                             if(i == KeyEvent.KEYCODE_ENTER) {
-                                if (ViewActivity.boxId.equals(userInput.getText())) {
+                                if (ViewActivity.boxId.equals(userInput.getText().toString())) {
 
 
-                                    readBase.delete(Database.DATABASE_WRITE, Database.GOODS_LPB+" = " + userInput.getText(), null);
+                                    readBase.delete(Database.DATABASE_WRITE, Database.GOODS_LPB+" = " + userInput.getText().toString(), null);
                                     rv.setAdapter(adapter);
                                     adapter.notifyDataSetChanged();
                                     ViewActivity.initializeData();
@@ -178,17 +179,17 @@ public class BoxViewActivity extends Activity {
                     }
                 });
                 //Настраиваем сообщение в диалоговом окне:
-                mDialogBuilder
+                mDialogBuilder.setMessage("Подвердите удаление сканированием или введите код в ручную")
                         .setCancelable(false)
                         .setPositiveButton("OK",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         //Вводим текст и отображаем в строке ввода на основном экране:
+                                        String ids = userInput.getText().toString();
+                                        if (boxId.equals(ids)) {
 
-                                        if (ViewActivity.boxId.equals(userInput.getText())) {
 
-
-                                            readBase.delete(Database.DATABASE_WRITE, Database.GOODS_LPB+" = " + userInput.getText(), null);
+                                            readBase.delete(Database.DATABASE_WRITE, Database.GOODS_LPB+" = '" + ids +"'", null);
                                             rv.setAdapter(adapter);
                                             adapter.notifyDataSetChanged();
                                             ViewActivity.initializeData();
@@ -196,11 +197,12 @@ public class BoxViewActivity extends Activity {
                                             ViewActivity.adapter.notifyDataSetChanged();
                                             Intent intent = new Intent(getApplicationContext(), ViewActivity.class);
                                             startActivity(intent);
+                                            finish();
 
                                         } else {
                                             AlertDialog.Builder builder = new AlertDialog.Builder(context);
                                             builder.setTitle("Ошибка!")
-                                                    .setMessage("Данной коробке нет в базе данных!")
+                                                    .setMessage("ШК был введен не правильно!")
                                                     .setCancelable(false)
                                                     .setNegativeButton("Закрыть",
                                                             new DialogInterface.OnClickListener() {
@@ -255,6 +257,7 @@ public class BoxViewActivity extends Activity {
     public void onBackPressed() {
 
         Intent intent = new Intent(getApplicationContext(),ViewActivity.class);
+        finish();
         startActivity(intent);
 
 
@@ -345,6 +348,7 @@ public class BoxViewActivity extends Activity {
         if(c.moveToFirst()){
             do{
                 if(c.getString(8).equals(ViewActivity.boxId)) {
+                    boxId = ViewActivity.boxId;
                     list.add(new Items(c.getString(4).length()>12?c.getString(4).substring(4,15):c.getString(4),
                             c.getString(5).length() > 1 ? "Считан" : "Не считан"));
                 }

@@ -57,7 +57,10 @@ public class StartMenu extends BaseActivity {
 
         }
     }
-
+    @Override
+    public void onBackPressed() {
+        finishAffinity();
+    }
     private boolean boxcount() {
         return readBase.query(Database.DATABASE_SCAN, null, null, null, null, null, null, null).getCount() > 0;
     }

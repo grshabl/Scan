@@ -1,6 +1,7 @@
 package com.azbuka.gshabalov.tsd_alcho_app.Activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -61,5 +62,13 @@ public class ScanBoxViewActivity extends Activity {
     private void initializeAdapter(){
         AdapterView adapter = new AdapterView(list);
         rv.setAdapter(adapter);
+    }
+    @Override
+    public void onBackPressed() {
+        // super.onBackPressed();
+        Intent intent = new Intent(getApplicationContext(), ScanActivity.class);
+        startActivity(intent);
+        finish();
+
     }
 }

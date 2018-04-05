@@ -147,7 +147,7 @@ public class ViewActivity extends Activity {
                 TextView textView = (TextView) promptsView.findViewById(R.id.tv);
                 textView.setText("Введите ШК коробки");
                 //Настраиваем сообщение в диалоговом окне:
-                mDialogBuilder
+                mDialogBuilder.setMessage("Введите ШК коробки")
                         .setCancelable(false)
                         .setPositiveButton("OK",
                                 new DialogInterface.OnClickListener() {
@@ -164,6 +164,8 @@ public class ViewActivity extends Activity {
                                                     intent1.putExtra("boxId", userInput.getText().toString());
                                                     context.startActivity(intent1);
                                                     flag = true;
+                                                    finish();
+                                                    return;
                                                 }
                                             }while (c.moveToNext());
 
@@ -278,7 +280,10 @@ public class ViewActivity extends Activity {
     public void onBackPressed() {
         // super.onBackPressed();
         Intent intent = new Intent(getApplicationContext(), StartMenu.class);
+        finish();
         startActivity(intent);
+        finish();
+        onDestroy();
 
     }
 
