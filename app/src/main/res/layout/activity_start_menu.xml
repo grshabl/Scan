@@ -14,6 +14,11 @@
         android:layout_marginTop="5dp"
         android:id="@+id/scan"
         android:layout_width="match_parent"
+<<<<<<< HEAD
+=======
+        android:layout_height="0dp"
+        android:layout_weight="1"
+>>>>>>> 6cb04a749cd984b7780176fddc99679db4d06915
         android:onClick="onClick"
         android:layout_marginLeft="-10dp"
         android:layout_marginRight="-10dp"
@@ -27,7 +32,8 @@
         android:layout_marginLeft="-10dp"
         android:layout_marginRight="-10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:onClick="onClick"
         android:text="@string/settings" />
 
@@ -38,7 +44,8 @@
         android:layout_marginLeft="-10dp"
         android:layout_marginRight="-10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:onClick="onClick"
         android:text="@string/look" />
 
@@ -49,7 +56,8 @@
         android:layout_marginLeft="-10dp"
         android:layout_marginRight="-10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:onClick="onClick"
         android:text="@string/ext" />
 
