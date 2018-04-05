@@ -16,9 +16,12 @@ import android.widget.Spinner;
 import com.azbuka.gshabalov.tsd_alcho_app.R;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.CSVReadingHelper;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Database;
+import com.azbuka.gshabalov.tsd_alcho_app.utils.Items;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.WriteCSVHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Settings extends Activity {
     Spinner spinner;
@@ -26,30 +29,51 @@ public class Settings extends Activity {
     SQLiteDatabase readBase;
     SharedPreferences sPref;
     EditText template;
+    ArrayAdapter<String> adapter;
+    ArrayList<String> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         ArrayList<String> plodNames = new ArrayList<>();
-        spinner = findViewById(R.id.spinirishe);
+        spinner = (Spinner)findViewById(R.id.spinner1);
 
         template = findViewById(R.id.edittextishe);
         readDatabase = new Database(this);
         readBase = readDatabase.getWritableDatabase();
-        Cursor cursor = readBase.query(true, Database.DATABASE_WRITE, new String[]{Database.PLOD}, null, null, Database.PLOD, null, null, null);
-        if (cursor.moveToFirst()) {
-            int index = cursor.getColumnIndex(Database.PLOD);
-            do {
-                plodNames.add(cursor.getString(index));
-            } while (cursor.moveToNext());
-            cursor.close();
-            spinner = findViewById(R.id.spinner);
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, plodNames);
+        Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE,null);
+        Map<String,Integer> map = new HashMap<>();
+        String tmp;
+        int count;
+        list = new ArrayList<>();
+        if(c.moveToFirst()){
+            do{
+                tmp = c.getString(1);
+                if(!list.contains(tmp)) {
+                    list.add(tmp);
+                }
+
+            }while(c.moveToNext());
+        }
+        c.close();
+
+
+            spinner = findViewById(R.id.spinner1);
+            adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, list);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             if(adapter!=null)
             spinner.setAdapter(adapter);
-        }
+        spinner.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(android.widget.AdapterView<?> adapterView, View view, int i, long l) {
+            }
+
+            @Override
+            public void onNothingSelected(android.widget.AdapterView<?> adapterView) {
+            }
+
+        });
 
     }
 
@@ -71,7 +95,36 @@ public class Settings extends Activity {
     }
 
     private void clearbase() {
-        readBase.delete(Database.DATABASE_WRITE, Database.PLOD, new String[]{spinner.getSelectedItem().toString()});
+        readBase.delete(Database.DATABASE_WRITE,Database.PLOD + " = '"+spinner.getSelectedItem().toString()+"'",null);
+        Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE,null);
+        Map<String,Integer> map = new HashMap<>();
+        String tmp;
+        int count;
+        list = new ArrayList<>();
+        if(c.moveToFirst()){
+            do{
+                tmp = c.getString(1);
+                if(!list.contains(tmp)) {
+                    list.add(tmp);
+                }
+
+            }while(c.moveToNext());
+        }
+        c.close();
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, list);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        if(adapter!=null)
+            spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(android.widget.AdapterView<?> adapterView, View view, int i, long l) {
+            }
+
+            @Override
+            public void onNothingSelected(android.widget.AdapterView<?> adapterView) {
+            }
+
+        });
     }
 
     void saveText(String lpb) {
