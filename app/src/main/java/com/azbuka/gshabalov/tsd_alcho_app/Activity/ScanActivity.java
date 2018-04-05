@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.wifi.ScanResult;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -538,17 +539,36 @@ public class ScanActivity extends BaseActivity {
 
     @Override
     protected void onResume() {
+        PackageManager pm = ScanActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(ScanActivity.this, ScanActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
         boxCount.setText(boxcount().toString());
         super.onResume();
     }
-
+    @Override
+    protected void onPause(){
+        PackageManager pm = ScanActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(ScanActivity.this, ScanActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        super.onPause();
+    }
     @Override
     protected void onRestart() {
+        PackageManager pm = ScanActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(ScanActivity.this, ScanActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
         boxCount.setText(boxcount().toString());
         super.onRestart();
     }
     @Override
     protected void onStart(){
+        PackageManager pm = ScanActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(ScanActivity.this, ScanActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
         if(mult.equals("0") && boxcount()!=0){
             Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_SCAN,null);
             if(c.moveToFirst()){
@@ -566,6 +586,10 @@ public class ScanActivity extends BaseActivity {
     }
     @Override
     protected void onStop() {
+        PackageManager pm = ScanActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(ScanActivity.this, ScanActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
         saveText(description.getText().toString(), boxean);
         cursor.close();
         super.onStop();
@@ -573,6 +597,10 @@ public class ScanActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+        PackageManager pm = ScanActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(ScanActivity.this, ScanActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
         Log.d("logs","onDestroy");
         saveText(description.getText().toString(), boxean);
         cursor.close();

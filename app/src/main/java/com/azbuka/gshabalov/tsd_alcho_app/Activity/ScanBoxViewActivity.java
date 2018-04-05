@@ -32,6 +32,13 @@ public class ScanBoxViewActivity extends Activity {
         rv.setLayoutManager(llm);
         rv.setHasFixedSize(true);
         initializeData();
+        Intent intent1 = new Intent("device.scanner.USERMSG");
+        intent1.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        sendBroadcast(intent1,"app.permission.SCANNER_RESULT_RECEIVER");
+        sendBroadcast(intent1,".app.permission.SCANNER_RESULT_RECEIVER");
+        sendBroadcast(intent1);
+
+
         Database database = new Database(this);
         db = database.getWritableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM "+Database.DATABASE_SCAN,null);
