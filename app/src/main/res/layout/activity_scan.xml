@@ -54,9 +54,11 @@
 
         <TextView
             android:id="@+id/qrcode"
+            android:textSize="24sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="-8.5dp"
             android:layout_toEndOf="@id/qrtext"
             android:textStyle="bold" />
     </RelativeLayout>
@@ -77,6 +79,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:textSize="24sp"
+
+            android:layout_marginTop="-8.5dp"
             android:layout_toEndOf="@id/pdf417Text"
             android:textStyle="bold" />
     </RelativeLayout>

@@ -282,7 +282,10 @@ public class ViewActivity extends Activity {
     public void onBackPressed() {
         // super.onBackPressed();
         Intent intent = new Intent(getApplicationContext(), StartMenu.class);
+        finish();
         startActivity(intent);
+        finish();
+        onDestroy();
 
     }
 

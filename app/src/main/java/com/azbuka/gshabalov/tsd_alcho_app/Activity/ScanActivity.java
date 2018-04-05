@@ -221,8 +221,10 @@ public class ScanActivity extends BaseActivity {
                 else if (data[1] == null && data[2] == null){
                     lpb = scanStr;
                     boxCount.setText("0");
+                    description.setText("");
                     readBase.execSQL(String.format("Update %s set %s = '0'", Database.DATABASE_SCAN, Database.MULTIPLICITY));
                     twoInOne(lpb);
+                    data[0] = null;
                 } else {
                     Alert("Сначала закончите сканирование бутылки");
                 }
@@ -332,12 +334,22 @@ public class ScanActivity extends BaseActivity {
         if(c.moveToFirst()){
             do {
                 if(c.getString(4).equals(qr)) {
-
+                    c.close();
                     return true;
-
                 }
             }while (c.moveToNext());
         }
+        c.close();
+         c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE,null);
+        if(c.moveToFirst()){
+            do {
+                if(c.getString(4).equals(qr)) {
+                    c.close();
+                    return true;
+                }
+            }while (c.moveToNext());
+        }
+        c.close();
         return false;
     }
 
@@ -369,7 +381,9 @@ public class ScanActivity extends BaseActivity {
             public void onClick(DialogInterface dialog, int arg1) {
                 setMultiplicityError();
                 boxCount.setText("0");
+                description.setText("");
                 lpb = scanStr;
+                data[0] = null;
                 twoInOne(lpb);
             }
         });
@@ -382,10 +396,22 @@ public class ScanActivity extends BaseActivity {
         switch (v.getId()) {
 
             case R.id.erase:
-                data[1] = null;
-                data[2] = null;
-                qrCode.setText("");
-                pdf417Code.setText("");
+                AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);
+                builder.setTitle("Внимание!").setMessage("Вы действительно хотите удалить введенные данные?").setCancelable(false).setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                }).setPositiveButton("Подтвердить", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int arg1) {
+                        data[1] = null;
+                        data[2] = null;
+                        qrCode.setText("");
+                        pdf417Code.setText("");
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
+
                 break;
 
             case R.id.cantPdf:
@@ -456,9 +482,11 @@ public class ScanActivity extends BaseActivity {
         if (checkScan()) {
             Intent intent = new Intent(this, StartMenu.class);
             this.startActivity(intent);
+            finish();
         } else {
             Intent intent = new Intent(this, ChoosePlod.class);
             this.startActivity(intent);
+            finish();
         }
 
     }
