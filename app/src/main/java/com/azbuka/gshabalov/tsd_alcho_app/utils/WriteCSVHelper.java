@@ -42,15 +42,21 @@ public class WriteCSVHelper {
      * @throws IOException
      */
     private void createCsvFile() throws IOException {
-
         File createPath = new File("/" + folderName);
-        createPath.mkdir();
+        if (!createPath.exists())
+            createPath.mkdirs();
+
         String path = createPath.getPath();
 
         try {
+            File dir = new File(path);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+
             File csvFile = new File(path + "/" + fileName);
             csvFile.createNewFile();
-            fileOutputStream = new FileOutputStream(csvFile);
+            fileOutputStream = new FileOutputStream(csvFile, true);
             outputStreamWriter = new OutputStreamWriter(fileOutputStream);
 
         } catch (IOException e) {

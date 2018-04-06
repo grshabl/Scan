@@ -40,16 +40,18 @@ public class ChoosePlod extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_plod);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            requestForPermission();
+
+        findViews();
+        initDb();
+
         ArrayList<String> plodNames = new ArrayList<>();
+
         sPref = getSharedPreferences("DataShared", MODE_PRIVATE);
         current = sPref.getString(Database.DATABASE_FILENAME, "");
-        readDatabase = new Database(this);
-        readBase = readDatabase.getWritableDatabase();
 
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestForPermission();
-        }
 
 
         File file = new File("/storage/emulated/0/AvExchange/In");
@@ -62,9 +64,7 @@ public class ChoosePlod extends BaseActivity {
                     clearbase();
                     Alert("Список PLOD был обновлен");
                 }
-
             }
-
         } else {
             Alert("Папка пуста или файлы не распознаны");
         }
@@ -77,12 +77,21 @@ public class ChoosePlod extends BaseActivity {
                 plodNames.add(cursor.getString(index));
             } while (cursor.moveToNext());
             cursor.close();
-            spinner = findViewById(R.id.spinner);
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, plodNames);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(adapter);
+
         }
 
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, plodNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+    }
+
+    private void findViews() {
+        spinner = findViewById(R.id.spinner);
+    }
+
+    private void initDb() {
+        readDatabase = new Database(this);
+        readBase = readDatabase.getWritableDatabase();
     }
 
 
@@ -90,7 +99,13 @@ public class ChoosePlod extends BaseActivity {
         switch (v.getId()) {
 
             case R.id.choosePlodButton:
-                saveText(spinner.getSelectedItem().toString(), current);
+                Object selected = spinner.getSelectedItem();
+                if (selected == null || selected.toString().isEmpty()) {
+                    Alert("PLOD не выбран");
+                    return;
+                }
+
+                saveText(selected.toString(), current);
                 Intent intent = new Intent(this, ScanActivity.class);
                 this.startActivity(intent);
                 break;

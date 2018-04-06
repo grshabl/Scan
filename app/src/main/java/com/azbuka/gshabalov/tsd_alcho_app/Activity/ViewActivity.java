@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -24,7 +24,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.azbuka.gshabalov.tsd_alcho_app.BaseActivity;
 import com.azbuka.gshabalov.tsd_alcho_app.R;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.BoxesAdapterView;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Database;
@@ -210,6 +209,10 @@ public class ViewActivity extends Activity {
             @Override
             public void onClick(View view) {
                 outData(readBase);
+                SharedPreferences.Editor ed = getSharedPreferences("DataShared", MODE_PRIVATE).edit();
+                ed.putString(Database.GOODS_NAME, "");
+                ed.putString(Database.BOX_EAN, "");
+                ed.apply();
             }
         });
         initializeAdapter();
@@ -311,7 +314,7 @@ public class ViewActivity extends Activity {
 
         String foldeName = "/storage/sdcard0/AvExchange/Out";
         //Имя файла нужно указывать с расширением если оно нужно
-        String fileName = "Out";
+        String fileName = "Out.txt";
 
         String[] string = new String[8];
         String[] strings = {"", "", ""};

@@ -6,31 +6,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.azbuka.gshabalov.tsd_alcho_app.Activity.StartMenu">
-
-
     <Button
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:id="@+id/scan"
         android:layout_width="match_parent"
-<<<<<<< HEAD
-=======
         android:layout_height="0dp"
+        android:layout_marginTop="6dp"
         android:layout_weight="1"
->>>>>>> 6cb04a749cd984b7780176fddc99679db4d06915
         android:onClick="onClick"
-        android:layout_marginLeft="-10dp"
-        android:layout_marginRight="-10dp"
         android:text="@string/scan" />
-
 
     <Button
         android:id="@+id/settings"
-        android:layout_weight="1"
-
-        android:layout_marginLeft="-10dp"
-        android:layout_marginRight="-10dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -39,10 +25,6 @@
 
     <Button
         android:id="@+id/view"
-        android:layout_weight="1"
-
-        android:layout_marginLeft="-10dp"
-        android:layout_marginRight="-10dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -51,14 +33,9 @@
 
     <Button
         android:id="@+id/ext"
-        android:layout_weight="1"
-
-        android:layout_marginLeft="-10dp"
-        android:layout_marginRight="-10dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:onClick="onClick"
         android:text="@string/ext" />
-
 </LinearLayout>

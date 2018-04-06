@@ -15,7 +15,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -87,10 +86,8 @@ public class ScanActivity extends BaseActivity {
         if (boxean != null && !boxean.equals("")) {
             data[0] = boxean;
             checkInPlod(boxean);
-            description.setText(sPref.getString(Database.GOODS_NAME, ""));
+//            description.setText(sPref.getString(Database.GOODS_NAME, ""));
         }
-
-
 
         PackageManager pm = ScanActivity.this.getPackageManager();
         ComponentName componentName = new ComponentName(ScanActivity.this, ScanResultReceiver.class);
@@ -131,8 +128,9 @@ public class ScanActivity extends BaseActivity {
     private Boolean checkInPlod(String ean) {
         cursor = inPlod(ean);
         if (cursor.moveToFirst()) {
-            int name = cursor.getColumnIndex(Database.GOODS_NAME);
-            description.setText(cursor.getString(name));
+            String name = cursor.getString(cursor.getColumnIndex(Database.GOODS_NAME));
+            description.setText(name);
+            saveText(name, ean);
             boxean = ean;
             return true;
         } else {
@@ -173,7 +171,14 @@ public class ScanActivity extends BaseActivity {
 
     private Cursor inPlod(String ean) {
         boxean = ean;
-        return readBase.query(Database.DATABASE_READ, pole, Database.BOX_EAN + " = '" + ean + "' and " + Database.PLOD + " ='" + plod + "'", null, null, null, null);
+        String[] args = {ean, plod};
+        return readBase.query(Database.DATABASE_READ,
+                              pole,
+                              Database.BOX_EAN + " = ? and " + Database.PLOD + " = ?",
+                              args,
+                              null,
+                              null,
+                              null);
     }
 
     private void addBottleInDB() {
@@ -209,19 +214,23 @@ public class ScanActivity extends BaseActivity {
                 if(mult.equals("0"))
                     flag = true;
                 for(String mult: multi){
-                    if(boxcount()==Integer.parseInt(mult)){
+                    if(boxcount() == Integer.parseInt(mult)){
                         flag = true;
                     }
                 }
-                if(!flag)
+                if (!flag) {
                     chooseAlert(scanStr);
-                else if (data[1] == null && data[2] == null){
+                } else if (data[1] == null && data[2] == null) {
+                    if (hasAlreadyScanBoxWithCode(scanStr)) {
+                        Alert("ШК коробки уже был просканирован");
+                        return;
+                    }
                     lpb = scanStr;
                     boxCount.setText("0");
-                    description.setText("");
+//                    description.setText("");
                     readBase.execSQL(String.format("Update %s set %s = '0'", Database.DATABASE_SCAN, Database.MULTIPLICITY));
                     twoInOne(lpb);
-                    data[0] = null;
+//                    data[0] = null;
                 } else {
                     Alert("Сначала закончите сканирование бутылки");
                 }
@@ -251,7 +260,6 @@ public class ScanActivity extends BaseActivity {
                             } else if (errorQR(scanStr).equals(data[1]) || qrnew(errorQR(scanStr))) {
                                 Alert("QR уже был считан");
                             } else {
-
                                 if (checkQR(scanStr.substring(3, 11))) {
                                     data[1] = errorQR(scanStr); //QR scan
                                     qrDestroy(errorQR(scanStr));
@@ -278,12 +286,13 @@ public class ScanActivity extends BaseActivity {
                             break;
 
                         case 68:
-                            if (data[0] != null) {
-
+                            if (data[0] == null) {
+                                Alert("Необходимо просканировать ШК бутылки");
+                            } else if (scanStr.equals(data[2]) || isInputPDFWasScanned(scanStr)) {
+                                Alert("PDF417 уже был считан");
+                            } else {
                                 data[2] = scanStr; //PDF
                                 pdf417Code.setText("считан");
-                            } else {
-                                Alert("Необходимо просканировать ШК бутылки");
                             }
                             break;
 
@@ -296,6 +305,19 @@ public class ScanActivity extends BaseActivity {
                 checkFull();
             }
         }
+    }
+
+    private boolean hasAlreadyScanBoxWithCode(String lpb) {
+        String[] rows = { Database.GOODS_LPB };
+        String[] args = { lpb };
+        return readBase.query(Database.DATABASE_WRITE,
+                              rows,
+                              Database.GOODS_LPB + " = ?",
+                              args,
+                              null,
+                              null,
+                              null,
+                              null).getCount() > 0;
     }
 
     private void setMultiplicityError() {
@@ -350,6 +372,30 @@ public class ScanActivity extends BaseActivity {
         return false;
     }
 
+    private boolean isInputPDFWasScanned(String pfd) {
+        Cursor c = readBase.rawQuery("SELECT * FROM " + Database.DATABASE_SCAN,null);
+        if (c.moveToFirst()){
+            do {
+                if(c.getString(5).equals(pfd)) {
+                    c.close();
+                    return true;
+                }
+            } while (c.moveToNext());
+        }
+        c.close();
+        c = readBase.rawQuery("SELECT * FROM " + Database.DATABASE_WRITE,null);
+        if(c.moveToFirst()){
+            do {
+                if(c.getString(5).equals(pfd)) {
+                    c.close();
+                    return true;
+                }
+            }while (c.moveToNext());
+        }
+        c.close();
+        return false;
+    }
+
     public void Alert(String msg) {
         scanenable = false;
         AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);
@@ -368,22 +414,27 @@ public class ScanActivity extends BaseActivity {
     }
 
     private void chooseAlert(final String scanStr) {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);
-        builder.setTitle("Внимание!").setMessage("Количество просканированных бутылок (" + boxCount.getText().toString() + ") не соответсвует кратности (" + mult.replace("~", ".") + ") .Продолжить? ").setCancelable(false).setNegativeButton("Закрыть", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-            }
-        }).setPositiveButton("Ок", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int arg1) {
-                setMultiplicityError();
-                boxCount.setText("0");
-                description.setText("");
-                lpb = scanStr;
-                data[0] = null;
-                twoInOne(lpb);
-            }
-        });
+        builder
+                .setTitle("Внимание!")
+                .setMessage("Количество просканированных бутылок (" + boxCount.getText().toString() + ") не соответсвует кратности (" + mult.replace("~", ".") + ") .Продолжить? ")
+                .setCancelable(false)
+                .setNegativeButton("Закрыть", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                })
+                .setPositiveButton("Ок", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int arg1) {
+                        setMultiplicityError();
+                        boxCount.setText("0");
+//                        description.setText("");
+                        lpb = scanStr;
+//                        data[0] = null;
+                        twoInOne(lpb);
+                    }
+                });
+
         AlertDialog alert = builder.create();
         alert.show();
     }
@@ -470,7 +521,7 @@ public class ScanActivity extends BaseActivity {
                 readBase.insert(Database.DATABASE_WRITE, null, values);
             } while (c.moveToNext());
         }
-        readBase.delete(Database.DATABASE_SCAN, "1", null);
+        readBase.delete(Database.DATABASE_SCAN, null, null);
         c.close();
     }
 
@@ -556,23 +607,15 @@ public class ScanActivity extends BaseActivity {
         if (boxean != null && !boxean.equals("")) {
             data[0] = boxean;
             checkInPlod(boxean);
-            description.setText(sPref.getString(Database.GOODS_NAME, ""));
+//            description.setText(sPref.getString(Database.GOODS_NAME, ""));
         }
         super.onStart();
 
     }
     @Override
     protected void onStop() {
-        saveText(description.getText().toString(), boxean);
         if (cursor != null) cursor.close();
         super.onStop();
     }
 
-    @Override
-    protected void onDestroy() {
-        Log.d("logs","onDestroy");
-        saveText(description.getText().toString(), boxean);
-        if (cursor != null) cursor.close();
-        super.onDestroy();
-    }
 }

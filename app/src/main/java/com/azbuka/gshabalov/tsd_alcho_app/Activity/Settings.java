@@ -3,6 +3,7 @@ package com.azbuka.gshabalov.tsd_alcho_app.Activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -91,23 +92,6 @@ public class Settings extends Activity {
     }
 
     private void clearbase() {
-<<<<<<< HEAD
-        if(adapter!=null && spinner.getSelectedItem()!=null) {
-            readBase.delete(Database.DATABASE_WRITE, Database.PLOD + " = '" + spinner.getSelectedItem().toString() + "'", null);
-            Cursor c = readBase.rawQuery("SELECT * FROM " + Database.DATABASE_WRITE, null);
-            Map<String, Integer> map = new HashMap<>();
-            String tmp;
-            int count;
-            list = new ArrayList<>();
-            if (c.moveToFirst()) {
-                do {
-                    tmp = c.getString(1);
-                    if (!list.contains(tmp)) {
-                        list.add(tmp);
-                    }
-
-                } while (c.moveToNext());
-=======
         Object selected = spinner.getSelectedItem();
         if (selected == null || selected.toString().isEmpty()) return;
 
@@ -134,24 +118,13 @@ public class Settings extends Activity {
         spinner.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(android.widget.AdapterView<?> adapterView, View view, int i, long l) {
->>>>>>> 6cb04a749cd984b7780176fddc99679db4d06915
             }
-            c.close();
-            adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, list);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            if (adapter != null)
-                spinner.setAdapter(adapter);
-            spinner.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(android.widget.AdapterView<?> adapterView, View view, int i, long l) {
-                }
 
-                @Override
-                public void onNothingSelected(android.widget.AdapterView<?> adapterView) {
-                }
+            @Override
+            public void onNothingSelected(android.widget.AdapterView<?> adapterView) {
+            }
 
-            });
-        }
+        });
     }
 
     void saveText(String lpb) {
@@ -176,15 +149,13 @@ public class Settings extends Activity {
         AlertDialog alert = builder.create();
         alert.show();
     }
+
     @Override
     public void onBackPressed() {
         // super.onBackPressed();
         Intent intent = new Intent(getApplicationContext(), StartMenu.class);
         startActivity(intent);
         finish();
-
     }
-
-
 
 }
