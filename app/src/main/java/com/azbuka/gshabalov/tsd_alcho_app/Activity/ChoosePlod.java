@@ -67,7 +67,7 @@ public class ChoosePlod extends BaseActivity {
         }
 
 
-        File file = new File("/sdcard/AvExchange/In");
+        File file = new File("/storage/sdcard0/AvExchange/In");
         File[] files = file.listFiles();
 
         if (files!=null && files.length != 0) {
