@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="ru.av.permission.SCANNER_RESULT_RECEIVER" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -17,7 +18,6 @@
         <activity android:name=".Activity.StartMenu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -26,6 +26,7 @@
         <activity android:name=".Activity.Settings" />
         <activity android:name=".Activity.ViewActivity" />
         <activity android:name=".Activity.ScanBoxViewActivity" />
+        <activity android:name=".Activity.BoxViewActivity"></activity>
 
         <receiver
             android:name=".Activity.ScanActivity$ScanResultReceiver"
@@ -36,8 +37,26 @@
                 <action android:name="device.scanner.USERMSG" />
             </intent-filter>
         </receiver>
-
-        <activity android:name=".Activity.BoxViewActivity"></activity>
+        <receiver
+            android:name=".Activity.ViewActivity$ScanResultReceiver"
+            android:enabled="false"
+            android:permission=".app.permission.SCANNER_RESULT_RECEIVER"
+            android:priority="0">
+            <intent-filter>
+                <action android:name="device.scanner.USERMSG" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".Activity.BoxViewActivity$ScanResultReceiver"
+            android:enabled="false"
+            android:permission=".app.permission.SCANNER_RESULT_RECEIVER"
+            android:priority="0">
+            <intent-filter>
+                <action android:name="device.scanner.USERMSG" />
+            </intent-filter>
+        </receiver>
+        <meta-data android:name="com.rollbar.android.ACCESS_TOKEN"
+            android:value="75022c263a41498daa0f7c0200a383a1" />
     </application>
 
 </manifest>

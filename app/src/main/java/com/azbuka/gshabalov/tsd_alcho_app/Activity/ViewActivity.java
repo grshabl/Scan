@@ -4,19 +4,19 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -30,8 +30,9 @@ import com.azbuka.gshabalov.tsd_alcho_app.R;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.BoxesAdapterView;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Database;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Items;
+import com.azbuka.gshabalov.tsd_alcho_app.utils.WriteCSVHelper;
+import com.rollbar.android.Rollbar;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,22 +65,30 @@ public class ViewActivity extends Activity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
-            if (iScanner != null) {
+           // Toast.makeText(context,"Я вызвался",Toast.LENGTH_LONG).show();
+            if (iScanner != null ) {
                 try {
                     mDecodeResult.recycle();
                     iScanner.aDecodeGetResult(mDecodeResult);
                     barcode = mDecodeResult.toString();
-                    Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE+" WHERE "+Database.GOODS_LPB+" = "+barcode);
+                    boolean flag = false;
+                    Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE,null);
                     if(c.moveToFirst()) {
-                        Intent intent1 = new Intent(context, BoxViewActivity.class);
-                        intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                        intent1.putExtra("boxId", barcode);
-                        context.startActivity(intent1);
+                        do {
+                            if(c.getString(8).equals(barcode)) {
+                                Intent intent1 = new Intent(context, BoxViewActivity.class);
+                                intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                                boxId = barcode;
+                                intent1.putExtra("boxId", barcode);
+                                context.startActivity(intent1);
+                                flag = true;
+                            }
+                        }while (c.moveToNext());
 
 
-                    } else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(ViewActivity.context);
+                    }
+                    if(!flag){
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         builder.setTitle("Ошибка!")
                                 .setMessage("Данной коробки нет в базе данных")
                                 .setCancelable(false)
@@ -115,6 +124,7 @@ public class ViewActivity extends Activity {
         context = this;
         database = new Database(this);
         readBase = database.getWritableDatabase();
+
         //component1 = new ComponentName(this,ScanResultReceiver.class);
         initializeData();
 
@@ -143,20 +153,30 @@ public class ViewActivity extends Activity {
                 TextView textView = (TextView) promptsView.findViewById(R.id.tv);
                 textView.setText("Введите ШК коробки");
                 //Настраиваем сообщение в диалоговом окне:
-                mDialogBuilder
+                mDialogBuilder.setMessage("Введите ШК коробки")
                         .setCancelable(false)
                         .setPositiveButton("OK",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         //Вводим текст и отображаем в строке ввода на основном экране:
-                                        Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE+" WHERE "+Database.LPB" = "+userInput.getText());
-                                        if(c.moveToFirst()){
-                                            Intent intent = new Intent(context, BoxViewActivity.class);
-                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                                            intent.putExtra("boxId",userInput.getText());
-                                            startActivity(intent);
+                                        boolean flag = false;
+                                        Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE,null);
+                                        if(c.moveToFirst()) {
+                                            do {
+                                                if(c.getString(8).equals(userInput.getText().toString())) {
+                                                    Intent intent1 = new Intent(context, BoxViewActivity.class);
+                                                    intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                                                    boxId = userInput.getText().toString();
+                                                    intent1.putExtra("boxId", userInput.getText().toString());
+                                                    context.startActivity(intent1);
+                                                    flag = true;
+                                                    finish();
+                                                    return;
+                                                }
+                                            }while (c.moveToNext());
 
-                                        } else {
+                                        }
+                                         if(!flag){
 
                                             AlertDialog.Builder builder = new AlertDialog.Builder(context);
                                             builder.setTitle("Ошибка!")
@@ -191,25 +211,70 @@ public class ViewActivity extends Activity {
 
             }
         });
+        Button export = findViewById(R.id.importBut);
+        export.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                outData(readBase);
+            }
+        });
         initializeAdapter();
-
         PackageManager pm = ViewActivity.this.getPackageManager();
-        ComponentName componentName = new ComponentName(ViewActivity.this, ScanResultReceiver.class);
+        ComponentName componentName = new ComponentName(ViewActivity.this, ViewActivity.ScanResultReceiver.class);
         pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP);
+
         try {
             initScanner();
         } catch (RemoteException e) {
             e.printStackTrace();
         }
 
+
+    }
+    @Override
+    protected void onResume(){
+        PackageManager pm = ViewActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(ViewActivity.this, ViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+        super.onResume();
+    }
+    @Override
+    protected void onRestart(){
+        PackageManager pm = ViewActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(ViewActivity.this, ViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+        super.onRestart();
     }
 
 
 
 
     @Override
+    protected void onPause(){
+        Log.d("View","onPause");
+
+        PackageManager pm = ViewActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(ViewActivity.this, ViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        super.onPause();
+    }
+    @Override
+    protected void onStop(){
+        Log.d("View","onStop");
+        PackageManager pm = ViewActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(ViewActivity.this, ViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        super.onStop();
+    }
+    @Override
     protected void onDestroy() {
+        Log.d("View","onDestroy");
+
         if (iScanner != null) {
             try {
                 iScanner.aDecodeAPIDeinit();
@@ -229,13 +294,17 @@ public class ViewActivity extends Activity {
     @Override
     public void onBackPressed() {
         // super.onBackPressed();
-
-        Intent intent = new Intent(getApplicationContext(), BaseActivity.class);
+        Intent intent = new Intent(getApplicationContext(), StartMenu.class);
+        finish();
         startActivity(intent);
+        finish();
+        onDestroy();
 
     }
 
     private void initScanner() throws RemoteException {
+       // Toast.makeText(context,"Trying",Toast.LENGTH_LONG);
+
         iScanner = IScannerService.Stub.asInterface(ServiceManager
                 .getService("ScannerService"));
         if (iScanner != null) {
@@ -254,24 +323,56 @@ public class ViewActivity extends Activity {
             iScanner.aDecodeSetResultType(ScannerService.ResultType.DCD_RESULT_USERMSG);
         }
     }
+    private void outData(SQLiteDatabase db){
+        WriteCSVHelper writeCSVHelper;
 
+        String foldeName = "/storage/sdcard0/AvExchange/Out";
+        //Имя файла нужно указывать с расширением если оно нужно
+        String fileName = "Out";
+
+        String[] string = new String[8];
+        String[] strings = {"", "", ""};
+
+        writeCSVHelper = new WriteCSVHelper(foldeName, fileName, WriteCSVHelper.SEMICOLON_SEPARATOR);
+        Cursor c = db.rawQuery("SELECT * FROM "+ Database.DATABASE_WRITE,null);
+        if(c.moveToFirst()) {
+            do {
+                string[0] = c.getString(1);
+                string[1] = c.getString(2);
+                string[2] = c.getString(3);
+                string[3] = c.getString(4);
+                string[4] = c.getString(5);
+                string[5] = c.getString(6);
+                string[6] = c.getString(8);
+                string[7] = c.getString(9);
+                writeCSVHelper.writeLine(string);
+            }while (c.moveToNext());
+
+        }
+        writeCSVHelper.writeLine(strings);
+        writeCSVHelper.close();
+        db.delete(Database.DATABASE_WRITE,"1",null);
+        initializeData();
+        initializeAdapter();
+        adapter.notifyDataSetChanged();
+    }
     public static void initializeData() {
         ArrayList<Items> lbp = new ArrayList<>();
-        Cursor c = readBase.rawQuery("SELECT * FROM"+Database.DATABASE_WRITE,null);
+        Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE,null);
         Map<String,Integer> map = new HashMap<>();
-        String lpb;
+        String tmp;
         int count;
         ArrayList<String> lpblist = new ArrayList<>();
         if(c.moveToFirst()){
             do{
-                lpb = c.getString(9);
-                if(map.containsKey(lpb)) {
-                    count = map.get(lpb);
-                    map.put(lpb,count+1);
+                tmp = c.getString(8);
+                if(map.containsKey(tmp)) {
+                    count = map.get(tmp);
+                    map.put(tmp,count+1);
                 }
                 else {
-                    lpblist.add(lpb);
-                    map.put(lpb,1);
+                    lpblist.add(tmp);
+                    map.put(tmp,1);
                 }
             }while(c.moveToNext());
         }
@@ -282,6 +383,7 @@ public class ViewActivity extends Activity {
             item.setLpb(lpb1);
             lbp.add(item);
         }
+        list = lbp;
 
 
     }

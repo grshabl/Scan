@@ -2,6 +2,7 @@ package com.azbuka.gshabalov.tsd_alcho_app.Activity;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +11,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -20,6 +22,7 @@ import com.azbuka.gshabalov.tsd_alcho_app.BaseActivity;
 import com.azbuka.gshabalov.tsd_alcho_app.R;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.CSVReadingHelper;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Database;
+import com.rollbar.android.Rollbar;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -40,6 +43,18 @@ public class ChoosePlod extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_plod);
+        PackageManager pm = ChoosePlod.this.getPackageManager();
+        ComponentName componentName = new ComponentName(ChoosePlod.this, ViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        pm = ChoosePlod.this.getPackageManager();
+        componentName = new ComponentName(ChoosePlod.this, ScanActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        pm = ChoosePlod.this.getPackageManager();
+        componentName = new ComponentName(ChoosePlod.this, BoxViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
         ArrayList<String> plodNames = new ArrayList<>();
         sPref = getSharedPreferences("DataShared", MODE_PRIVATE);
         current = sPref.getString(Database.DATABASE_FILENAME, "");
@@ -55,7 +70,7 @@ public class ChoosePlod extends BaseActivity {
         File file = new File("/storage/sdcard0/AvExchange/In");
         File[] files = file.listFiles();
 
-        if (files.length != 0) {
+        if (files!=null && files.length != 0) {
             for (File f : files) {
                 if (f.toString().hashCode() > current.hashCode() || current.equals("")) {
                     current = f.toString();
@@ -90,15 +105,23 @@ public class ChoosePlod extends BaseActivity {
         switch (v.getId()) {
 
             case R.id.choosePlodButton:
-                saveText(spinner.getSelectedItem().toString(), current);
-                Intent intent = new Intent(this, ScanActivity.class);
-                this.startActivity(intent);
+                if(spinner!=null && spinner.getSelectedItem()!=null) {
+                    saveText(spinner.getSelectedItem().toString(), current);
+                    Intent intent = new Intent(this, ScanActivity.class);
+                    this.startActivity(intent);
+                }
                 break;
 
 
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, StartMenu.class);
+        this.startActivity(intent);
+        finish();
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private boolean requestForPermission() {

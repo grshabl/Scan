@@ -10,6 +10,7 @@ import com.azbuka.gshabalov.tsd_alcho_app.R;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.AdapterView;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Database;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Items;
+import com.rollbar.android.Rollbar;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -25,6 +26,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +34,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.security.Key;
 import java.util.ArrayList;
@@ -55,6 +58,7 @@ public class BoxViewActivity extends Activity {
     private Activity activity;
     private static RecyclerView rv;
     Database database;
+    private static String boxId;
     private static SQLiteDatabase readBase;
     private static Intent intent;
     private static int kostil = 0;
@@ -65,6 +69,7 @@ public class BoxViewActivity extends Activity {
         String barCode;
         @Override
         public void onReceive(Context context, Intent intent) {
+          //  Toast.makeText(context,"Trying",Toast.LENGTH_LONG).show();
 
             if (iScanner != null && kostil!=0) {
                 try {
@@ -72,10 +77,10 @@ public class BoxViewActivity extends Activity {
                     mDecodeResult.recycle();
                     iScanner.aDecodeGetResult(mDecodeResult);
                     barCode = mDecodeResult.toString(); //ра
-                    if (intent.getStringExtra("boxId").equals(barCode)) {
+                    if (ViewActivity.boxId.equals(barCode)) {
 
 
-                        readBase.delete(Database.DATABASE_WRITE, "LPB = " + barCode, null);
+                        readBase.delete(Database.DATABASE_WRITE, Database.GOODS_LPB+" = " + barCode, null);
                         rv.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                         ViewActivity.initializeData();
@@ -111,15 +116,18 @@ public class BoxViewActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_box_view);
+
         activity = this;
-        initializeData();
         intent = getIntent();
+        TextView lpbText = findViewById(R.id.lpbText);
+        lpbText.setText(ViewActivity.boxId);
         rv = (RecyclerView) findViewById(R.id.boxViewList);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
         rv.setHasFixedSize(true);
         database = new Database(this);
         readBase = database.getWritableDatabase();
+        initializeData();
         initializeAdapter();
 
         Button button = (Button) findViewById(R.id.deleteBox);
@@ -127,16 +135,7 @@ public class BoxViewActivity extends Activity {
             @Override
             public void onClick(View view) {
                 kostil = 1;
-                PackageManager pm = BoxViewActivity.this.getPackageManager();
-                ComponentName componentName = new ComponentName(BoxViewActivity.this, BoxViewActivity.ScanResultReceiver.class);
-                pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                        PackageManager.DONT_KILL_APP);
 
-                try {
-                    initScanner();
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
                 LayoutInflater li = LayoutInflater.from(context);
                 View promptsView = li.inflate(R.layout.alert_dialog, null);
 
@@ -154,10 +153,10 @@ public class BoxViewActivity extends Activity {
                     public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                         if(keyEvent.getAction()==keyEvent.ACTION_DOWN){
                             if(i == KeyEvent.KEYCODE_ENTER) {
-                                if (intent.getStringExtra("boxId").equals(userInput.getText())) {
+                                if (ViewActivity.boxId.equals(userInput.getText().toString())) {
 
 
-                                    readBase.delete(Database.DATABASE_WRITE, "LPB = " + userInput.getText(), null);
+                                    readBase.delete(Database.DATABASE_WRITE, Database.GOODS_LPB+" = " + userInput.getText().toString(), null);
                                     rv.setAdapter(adapter);
                                     adapter.notifyDataSetChanged();
                                     ViewActivity.initializeData();
@@ -187,17 +186,17 @@ public class BoxViewActivity extends Activity {
                     }
                 });
                 //Настраиваем сообщение в диалоговом окне:
-                mDialogBuilder
+                mDialogBuilder.setMessage("Подвердите удаление сканированием или введите код в ручную")
                         .setCancelable(false)
                         .setPositiveButton("OK",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         //Вводим текст и отображаем в строке ввода на основном экране:
+                                        String ids = userInput.getText().toString();
+                                        if (boxId.equals(ids)) {
 
-                                        if (intent.getStringExtra("boxId").equals(userInput.getText())) {
 
-
-                                            readBase.delete(Database.DATABASE_WRITE, "LPB = " + userInput.getText(), null);
+                                            readBase.delete(Database.DATABASE_WRITE, Database.GOODS_LPB+" = '" + ids +"'", null);
                                             rv.setAdapter(adapter);
                                             adapter.notifyDataSetChanged();
                                             ViewActivity.initializeData();
@@ -205,11 +204,12 @@ public class BoxViewActivity extends Activity {
                                             ViewActivity.adapter.notifyDataSetChanged();
                                             Intent intent = new Intent(getApplicationContext(), ViewActivity.class);
                                             startActivity(intent);
+                                            finish();
 
                                         } else {
                                             AlertDialog.Builder builder = new AlertDialog.Builder(context);
                                             builder.setTitle("Ошибка!")
-                                                    .setMessage("Данной коробке нет в базе данных!")
+                                                    .setMessage("ШК был введен не правильно!")
                                                     .setCancelable(false)
                                                     .setNegativeButton("Закрыть",
                                                             new DialogInterface.OnClickListener() {
@@ -242,6 +242,25 @@ public class BoxViewActivity extends Activity {
 
             }
         });
+        PackageManager pm = BoxViewActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(BoxViewActivity.this, BoxViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+
+        try {
+            initScanner();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        Intent intent1 = new Intent("device.scanner.USERMSG");
+        intent1.putExtra("test","test");
+        intent1.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        sendBroadcast(intent1,"app.permission.SCANNER_RESULT_RECEIVER");
+        sendBroadcast(intent1,".app.permission.SCANNER_RESULT_RECEIVER");
+        sendOrderedBroadcast(intent1,"app.permission.SCANNER_RESULT_RECEIVER");
+        sendOrderedBroadcast(intent1,".app.permission.SCANNER_RESULT_RECEIVER");
+        sendStickyBroadcast(intent1);
+        sendBroadcast(intent1);
 
     }
 
@@ -254,6 +273,7 @@ public class BoxViewActivity extends Activity {
     public void onBackPressed() {
 
         Intent intent = new Intent(getApplicationContext(),ViewActivity.class);
+        finish();
         startActivity(intent);
 
 
@@ -277,6 +297,56 @@ public class BoxViewActivity extends Activity {
             iScanner.aDecodeSetResultType(ScannerService.ResultType.DCD_RESULT_USERMSG);
         }
     }
+    @Override
+    protected void onResume(){
+        PackageManager pm = BoxViewActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(BoxViewActivity.this, BoxViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+        super.onResume();
+    }
+    @Override
+    protected void onRestart(){
+        PackageManager pm = BoxViewActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(BoxViewActivity.this, BoxViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+        super.onRestart();
+    }
+
+    @Override
+    protected void onPause(){
+        PackageManager pm = BoxViewActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(BoxViewActivity.this, BoxViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        super.onPause();
+    }
+    @Override
+    protected void onStop(){
+        PackageManager pm = BoxViewActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(BoxViewActivity.this, BoxViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        super.onStop();
+    }
+    @Override
+    protected void onDestroy() {
+        if (iScanner != null) {
+            try {
+                iScanner.aDecodeAPIDeinit();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        iScanner = null;
+        PackageManager pm = BoxViewActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(BoxViewActivity.this, BoxViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        super.onDestroy();
+
+    }
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.
@@ -290,10 +360,14 @@ public class BoxViewActivity extends Activity {
     public static void initializeData(){
 
         list = new ArrayList<>();
-        Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE+" WHERE LPB = "+intent.getStringExtra("boxId"),null);
+        Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE,null);
         if(c.moveToFirst()){
             do{
-                list.add(new Items(c.getString(5),c.getString(6).length()>1?"Считан":"Не считан"));
+                if(c.getString(8).equals(ViewActivity.boxId)) {
+                    boxId = ViewActivity.boxId;
+                    list.add(new Items(c.getString(4).length()>12?c.getString(4).substring(4,15):c.getString(4),
+                            c.getString(5).length() > 1 ? "Считан" : "Не считан"));
+                }
             }while(c.moveToNext());
         }
     }

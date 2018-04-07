@@ -1,6 +1,8 @@
 package com.azbuka.gshabalov.tsd_alcho_app.Activity;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.view.View;
 import com.azbuka.gshabalov.tsd_alcho_app.BaseActivity;
 import com.azbuka.gshabalov.tsd_alcho_app.R;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Database;
+import com.rollbar.android.Rollbar;
 
 
 public class StartMenu extends BaseActivity {
@@ -20,6 +23,24 @@ public class StartMenu extends BaseActivity {
         setContentView(R.layout.activity_start_menu);
         database = new Database(this);
         readBase = database.getWritableDatabase();
+        Rollbar.init(this,"75022c263a41498daa0f7c0200a383a1","Scan");
+
+
+        PackageManager pm = StartMenu.this.getPackageManager();
+        ComponentName componentName = new ComponentName(StartMenu.this, ViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        pm = StartMenu.this.getPackageManager();
+        componentName = new ComponentName(StartMenu.this, ScanActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        pm = StartMenu.this.getPackageManager();
+        componentName = new ComponentName(StartMenu.this, BoxViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+       // Rollbar.reportException(new Exception("Test exception")); // default level is "warning"
+        //int i = 10/0;
+
     }
 
 
@@ -38,7 +59,8 @@ public class StartMenu extends BaseActivity {
                 break;
 
             case R.id.settings:
-
+                intent = new Intent(this, Settings.class);
+                startActivity(intent);
                 break;
 
 
@@ -50,13 +72,16 @@ public class StartMenu extends BaseActivity {
 
 
             case R.id.ext:
-
+                finishAffinity();
                 break;
 
 
         }
     }
-
+    @Override
+    public void onBackPressed() {
+        finishAffinity();
+    }
     private boolean boxcount() {
         return readBase.query(Database.DATABASE_SCAN, null, null, null, null, null, null, null).getCount() > 0;
     }

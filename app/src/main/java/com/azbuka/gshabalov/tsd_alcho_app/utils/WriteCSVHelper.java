@@ -195,13 +195,21 @@ public class WriteCSVHelper {
             e.printStackTrace();
             return false;
         }
+        catch (NullPointerException e){
+            e.printStackTrace();
+            return false;
 
+        }
         try {
             fileOutputStream.close();
             return true;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        }catch (NullPointerException e){
+            e.printStackTrace();
+            return false;
+
         }
 
     }

@@ -1,8 +1,12 @@
 package com.azbuka.gshabalov.tsd_alcho_app.Activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -14,9 +18,13 @@ import android.widget.Spinner;
 import com.azbuka.gshabalov.tsd_alcho_app.R;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.CSVReadingHelper;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Database;
+import com.azbuka.gshabalov.tsd_alcho_app.utils.Items;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.WriteCSVHelper;
+import com.rollbar.android.Rollbar;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Settings extends Activity {
     Spinner spinner;
@@ -24,29 +32,64 @@ public class Settings extends Activity {
     SQLiteDatabase readBase;
     SharedPreferences sPref;
     EditText template;
+    ArrayAdapter<String> adapter;
+    ArrayList<String> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        PackageManager pm = Settings.this.getPackageManager();
+        ComponentName componentName = new ComponentName(Settings.this, ViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        pm = Settings.this.getPackageManager();
+        componentName = new ComponentName(Settings.this, ScanActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        pm = Settings.this.getPackageManager();
+        componentName = new ComponentName(Settings.this, BoxViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
         ArrayList<String> plodNames = new ArrayList<>();
+        spinner = (Spinner)findViewById(R.id.spinner1);
 
         template = findViewById(R.id.edittextishe);
         readDatabase = new Database(this);
         readBase = readDatabase.getWritableDatabase();
-        Cursor cursor = readBase.query(true, Database.DATABASE_WRITE, new String[]{Database.PLOD}, null, null, Database.PLOD, null, null, null);
-        if (cursor.moveToFirst()) {
-            int index = cursor.getColumnIndex(Database.PLOD);
-            do {
-                plodNames.add(cursor.getString(index));
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
+        Cursor c = readBase.rawQuery("SELECT * FROM "+Database.DATABASE_WRITE,null);
+        Map<String,Integer> map = new HashMap<>();
+        String tmp;
+        int count;
+        list = new ArrayList<>();
+        if(c.moveToFirst()){
+            do{
+                tmp = c.getString(1);
+                if(!list.contains(tmp)) {
+                    list.add(tmp);
+                }
 
-        spinner = findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, plodNames);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+            }while(c.moveToNext());
+        }
+        c.close();
+
+
+            spinner = findViewById(R.id.spinner1);
+            adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, list);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            if(adapter!=null)
+            spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(android.widget.AdapterView<?> adapterView, View view, int i, long l) {
+            }
+
+            @Override
+            public void onNothingSelected(android.widget.AdapterView<?> adapterView) {
+            }
+
+        });
+
     }
 
 
@@ -54,8 +97,7 @@ public class Settings extends Activity {
         switch (v.getId()) {
 
             case R.id.deletePlod:
-                //saveText(spinner.getSelectedItem().toString(), current);
-
+                clearbase();
                 break;
 
 
@@ -68,7 +110,38 @@ public class Settings extends Activity {
     }
 
     private void clearbase() {
-        readBase.delete(Database.DATABASE_SCAN, Database.PLOD, new String[]{spinner.getSelectedItem().toString()});
+        if(adapter!=null && spinner.getSelectedItem()!=null) {
+            readBase.delete(Database.DATABASE_WRITE, Database.PLOD + " = '" + spinner.getSelectedItem().toString() + "'", null);
+            Cursor c = readBase.rawQuery("SELECT * FROM " + Database.DATABASE_WRITE, null);
+            Map<String, Integer> map = new HashMap<>();
+            String tmp;
+            int count;
+            list = new ArrayList<>();
+            if (c.moveToFirst()) {
+                do {
+                    tmp = c.getString(1);
+                    if (!list.contains(tmp)) {
+                        list.add(tmp);
+                    }
+
+                } while (c.moveToNext());
+            }
+            c.close();
+            adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, list);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            if (adapter != null)
+                spinner.setAdapter(adapter);
+            spinner.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(android.widget.AdapterView<?> adapterView, View view, int i, long l) {
+                }
+
+                @Override
+                public void onNothingSelected(android.widget.AdapterView<?> adapterView) {
+                }
+
+            });
+        }
     }
 
     void saveText(String lpb) {
@@ -78,35 +151,30 @@ public class Settings extends Activity {
         ed.apply();
     }
 
-    private void outData(SQLiteDatabase db){
-        WriteCSVHelper writeCSVHelper;
 
-        String foldeName = "/storage/sdcard0/AvExchange/Out";
-        //Имя файла нужно указывать с расширением если оно нужно
-        String fileName = "Out";
-
-        String[] string = new String[8];
-        String[] strings = {"", "", ""};
-
-        writeCSVHelper = new WriteCSVHelper(foldeName, fileName, WriteCSVHelper.SEMICOLON_SEPARATOR);
-        Cursor c = db.rawQuery("SELECT * FROM "+ Database.DATABASE_WRITE,null);
-        if(c.moveToFirst()) {
-            do {
-                string[0] = c.getString(1);
-                string[1] = c.getString(2);
-                string[2] = c.getString(3);
-                string[3] = c.getString(4);
-                string[4] = c.getString(5);
-                string[5] = c.getString(6);
-                string[6] = c.getString(7);
-                string[7] = c.getString(8);
-                writeCSVHelper.writeLine(string);
-            }while (c.moveToNext());
-
-        }
-        writeCSVHelper.writeLine(strings);
-        writeCSVHelper.close();
-        db.delete(Database.DATABASE_WRITE,"1",null);
+    public void Alert(String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Settings.this);
+        builder.setTitle("Информация")
+                .setMessage(msg)
+                .setCancelable(false)
+                .setNegativeButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
+    @Override
+    public void onBackPressed() {
+        // super.onBackPressed();
+        Intent intent = new Intent(getApplicationContext(), StartMenu.class);
+        startActivity(intent);
+        finish();
+
+    }
+
+
 
 }
