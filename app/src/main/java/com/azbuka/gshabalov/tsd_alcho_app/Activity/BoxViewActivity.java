@@ -10,6 +10,7 @@ import com.azbuka.gshabalov.tsd_alcho_app.R;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.AdapterView;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Database;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Items;
+import com.rollbar.android.Rollbar;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -25,6 +26,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +34,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.security.Key;
 import java.util.ArrayList;
@@ -66,6 +69,7 @@ public class BoxViewActivity extends Activity {
         String barCode;
         @Override
         public void onReceive(Context context, Intent intent) {
+          //  Toast.makeText(context,"Trying",Toast.LENGTH_LONG).show();
 
             if (iScanner != null && kostil!=0) {
                 try {
@@ -248,6 +252,15 @@ public class BoxViewActivity extends Activity {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+        Intent intent1 = new Intent("device.scanner.USERMSG");
+        intent1.putExtra("test","test");
+        intent1.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        sendBroadcast(intent1,"app.permission.SCANNER_RESULT_RECEIVER");
+        sendBroadcast(intent1,".app.permission.SCANNER_RESULT_RECEIVER");
+        sendOrderedBroadcast(intent1,"app.permission.SCANNER_RESULT_RECEIVER");
+        sendOrderedBroadcast(intent1,".app.permission.SCANNER_RESULT_RECEIVER");
+        sendStickyBroadcast(intent1);
+        sendBroadcast(intent1);
 
     }
 

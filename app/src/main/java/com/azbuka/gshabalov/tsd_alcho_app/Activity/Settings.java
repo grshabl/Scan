@@ -2,9 +2,11 @@ package com.azbuka.gshabalov.tsd_alcho_app.Activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import com.azbuka.gshabalov.tsd_alcho_app.utils.CSVReadingHelper;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Database;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Items;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.WriteCSVHelper;
+import com.rollbar.android.Rollbar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +39,18 @@ public class Settings extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        PackageManager pm = Settings.this.getPackageManager();
+        ComponentName componentName = new ComponentName(Settings.this, ViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        pm = Settings.this.getPackageManager();
+        componentName = new ComponentName(Settings.this, ScanActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        pm = Settings.this.getPackageManager();
+        componentName = new ComponentName(Settings.this, BoxViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
         ArrayList<String> plodNames = new ArrayList<>();
         spinner = (Spinner)findViewById(R.id.spinner1);
 

@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.azbuka.gshabalov.tsd_alcho_app.BaseActivity;
 import com.azbuka.gshabalov.tsd_alcho_app.R;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Database;
+import com.rollbar.android.Rollbar;
 
 import java.util.ArrayList;
 
@@ -496,7 +497,10 @@ public class ScanActivity extends BaseActivity {
     public static class ScanResultReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (iScanner != null) try {
+          //  Toast.makeText(context,"Trying",Toast.LENGTH_LONG).show();
+
+            String test = intent.getStringExtra("test");
+            if (iScanner != null ) try {
                 mDecodeResult.recycle();
                 iScanner.aDecodeGetResult(mDecodeResult);
                 barCode = mDecodeResult.toString();
@@ -591,19 +595,28 @@ public class ScanActivity extends BaseActivity {
         pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
         saveText(description.getText().toString(), boxean);
-        cursor.close();
+        if(cursor!=null && !cursor.isClosed())
+            cursor.close();
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
+        if (iScanner != null) {
+            try {
+                iScanner.aDecodeAPIDeinit();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        iScanner = null;
         PackageManager pm = ScanActivity.this.getPackageManager();
         ComponentName componentName = new ComponentName(ScanActivity.this, ScanActivity.ScanResultReceiver.class);
         pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
-        Log.d("logs","onDestroy");
         saveText(description.getText().toString(), boxean);
-        cursor.close();
+        if(cursor!=null && !cursor.isClosed())
+            cursor.close();
         super.onDestroy();
     }
 }

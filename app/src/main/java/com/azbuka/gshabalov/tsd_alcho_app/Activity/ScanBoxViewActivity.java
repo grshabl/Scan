@@ -1,7 +1,9 @@
 package com.azbuka.gshabalov.tsd_alcho_app.Activity;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import com.azbuka.gshabalov.tsd_alcho_app.R;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.AdapterView;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Database;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Items;
+import com.rollbar.android.Rollbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,19 +30,27 @@ public class ScanBoxViewActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_box_view);
+        PackageManager pm = ScanBoxViewActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(ScanBoxViewActivity.this, ViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        pm = ScanBoxViewActivity.this.getPackageManager();
+        componentName = new ComponentName(ScanBoxViewActivity.this, ScanActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        pm = ScanBoxViewActivity.this.getPackageManager();
+        componentName = new ComponentName(ScanBoxViewActivity.this, BoxViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
         rv=findViewById(R.id.bottlesList);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
         rv.setHasFixedSize(true);
         initializeData();
-        Intent intent1 = new Intent("device.scanner.USERMSG");
-        intent1.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-        sendBroadcast(intent1,"app.permission.SCANNER_RESULT_RECEIVER");
-        sendBroadcast(intent1,".app.permission.SCANNER_RESULT_RECEIVER");
-        sendBroadcast(intent1);
-
 
         Database database = new Database(this);
+
+
         db = database.getWritableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM "+Database.DATABASE_SCAN,null);
         Items item;
@@ -53,6 +64,7 @@ public class ScanBoxViewActivity extends Activity {
 
         initializeAdapter();
         Button button = (Button)findViewById(R.id.eraseBox);
+
     }
 
     public void delClick(View view) {

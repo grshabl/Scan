@@ -16,6 +16,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -30,6 +31,7 @@ import com.azbuka.gshabalov.tsd_alcho_app.utils.BoxesAdapterView;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Database;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Items;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.WriteCSVHelper;
+import com.rollbar.android.Rollbar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,8 +65,8 @@ public class ViewActivity extends Activity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Toast.makeText(context,"Я вызвался",Toast.LENGTH_LONG).show();
-            if (iScanner != null) {
+           // Toast.makeText(context,"Я вызвался",Toast.LENGTH_LONG).show();
+            if (iScanner != null ) {
                 try {
                     mDecodeResult.recycle();
                     iScanner.aDecodeGetResult(mDecodeResult);
@@ -228,6 +230,7 @@ public class ViewActivity extends Activity {
             e.printStackTrace();
         }
 
+
     }
     @Override
     protected void onResume(){
@@ -246,8 +249,13 @@ public class ViewActivity extends Activity {
         super.onRestart();
     }
 
+
+
+
     @Override
     protected void onPause(){
+        Log.d("View","onPause");
+
         PackageManager pm = ViewActivity.this.getPackageManager();
         ComponentName componentName = new ComponentName(ViewActivity.this, ViewActivity.ScanResultReceiver.class);
         pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
@@ -256,6 +264,7 @@ public class ViewActivity extends Activity {
     }
     @Override
     protected void onStop(){
+        Log.d("View","onStop");
         PackageManager pm = ViewActivity.this.getPackageManager();
         ComponentName componentName = new ComponentName(ViewActivity.this, ViewActivity.ScanResultReceiver.class);
         pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
@@ -264,6 +273,8 @@ public class ViewActivity extends Activity {
     }
     @Override
     protected void onDestroy() {
+        Log.d("View","onDestroy");
+
         if (iScanner != null) {
             try {
                 iScanner.aDecodeAPIDeinit();
@@ -292,6 +303,8 @@ public class ViewActivity extends Activity {
     }
 
     private void initScanner() throws RemoteException {
+       // Toast.makeText(context,"Trying",Toast.LENGTH_LONG);
+
         iScanner = IScannerService.Stub.asInterface(ServiceManager
                 .getService("ScannerService"));
         if (iScanner != null) {
