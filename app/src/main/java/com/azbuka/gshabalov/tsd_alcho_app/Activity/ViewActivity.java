@@ -216,6 +216,7 @@ public class ViewActivity extends Activity {
             }
         });
         initializeAdapter();
+
         PackageManager pm = ViewActivity.this.getPackageManager();
         ComponentName componentName = new ComponentName(ViewActivity.this, ViewActivity.ScanResultReceiver.class);
         pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
@@ -336,6 +337,7 @@ public class ViewActivity extends Activity {
 
         }
         writeCSVHelper.writeLine(strings);
+
         writeCSVHelper.close();
         db.delete(Database.DATABASE_WRITE,"1",null);
         initializeData();

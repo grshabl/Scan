@@ -1,7 +1,9 @@
 package com.azbuka.gshabalov.tsd_alcho_app.Activity;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -27,6 +29,18 @@ public class ScanBoxViewActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_box_view);
+        PackageManager pm = ScanBoxViewActivity.this.getPackageManager();
+        ComponentName componentName = new ComponentName(ScanBoxViewActivity.this, ViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        pm = ScanBoxViewActivity.this.getPackageManager();
+        componentName = new ComponentName(ScanBoxViewActivity.this, ScanActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        pm = ScanBoxViewActivity.this.getPackageManager();
+        componentName = new ComponentName(ScanBoxViewActivity.this, BoxViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
         rv=findViewById(R.id.bottlesList);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);

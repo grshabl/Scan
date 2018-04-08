@@ -195,13 +195,14 @@ public class WriteCSVHelper {
      * @return true if the writer was successfully closed, false if not
      */
     public boolean close(){
+        if(outputStreamWriter!=null)
         try {
             outputStreamWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
-
+        if(fileOutputStream!=null)
         try {
             fileOutputStream.close();
             return true;

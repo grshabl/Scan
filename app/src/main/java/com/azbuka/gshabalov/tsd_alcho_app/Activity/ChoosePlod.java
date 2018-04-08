@@ -2,6 +2,7 @@ package com.azbuka.gshabalov.tsd_alcho_app.Activity;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -39,10 +40,24 @@ public class ChoosePlod extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choose_plod);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             requestForPermission();
+        setContentView(R.layout.activity_choose_plod);
+        PackageManager pm = ChoosePlod.this.getPackageManager();
+        ComponentName componentName = new ComponentName(ChoosePlod.this, ViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        pm = ChoosePlod.this.getPackageManager();
+        componentName = new ComponentName(ChoosePlod.this, ScanActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        pm = ChoosePlod.this.getPackageManager();
+        componentName = new ComponentName(ChoosePlod.this, BoxViewActivity.ScanResultReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+
+
 
         findViews();
         initDb();
