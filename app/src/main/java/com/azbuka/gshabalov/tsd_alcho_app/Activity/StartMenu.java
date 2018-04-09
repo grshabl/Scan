@@ -11,6 +11,7 @@ import com.azbuka.gshabalov.tsd_alcho_app.BaseActivity;
 import com.azbuka.gshabalov.tsd_alcho_app.R;
 import com.azbuka.gshabalov.tsd_alcho_app.utils.Database;
 
+///import com.rollbar.android.Rollbar;
 
 public class StartMenu extends BaseActivity {
     private Database database;
@@ -22,6 +23,7 @@ public class StartMenu extends BaseActivity {
         setContentView(R.layout.activity_start_menu);
         database = new Database(this);
         readBase = database.getWritableDatabase();
+       // Rollbar.init(this,"75022c263a41498daa0f7c0200a383a1","Scan");
         PackageManager pm = StartMenu.this.getPackageManager();
         ComponentName componentName = new ComponentName(StartMenu.this, ViewActivity.ScanResultReceiver.class);
         pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
